@@ -58,7 +58,7 @@ class App extends Component<Record<string, never>, AppState> {
 
   render() {
     return (
-      <div>
+      <div className="container">
         <Search
           updateResults={this.handleFilterChange}
           searchTerm={this.state.searchTerm}

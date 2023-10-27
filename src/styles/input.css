@@ -1,6 +1,11 @@
+.input-content {
+  width: 100%;
+}
+
 .form-field {
   border: none;
   outline: none;
+  width: 100%;
   padding: 1rem;
   background-color: rgba(55, 55, 55, 1);
   border-radius: 1.5rem;

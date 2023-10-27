@@ -5,7 +5,6 @@ class ResultList extends Component<ResultListProps> {
   render() {
     return (
       <div className="result-list">
-        <h2 className="result-list-title">Search Results:</h2>
         <ul className="fetching-results">
           {this.props.results.map((result, index) => (
             <li className="result-list-item" key={index}>

@@ -55,15 +55,13 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     return (
       <div className="search-component">
         <div className="input-content">
-          <div className="form-group field">
-            <input
-              type="text"
-              className="form-field"
-              placeholder="Enter character name"
-              value={this.state.searchTerm}
-              onChange={this.handleInputChange}
-            />
-          </div>
+          <input
+            type="text"
+            className="form-field"
+            placeholder="Enter character name"
+            value={this.state.searchTerm}
+            onChange={this.handleInputChange}
+          />
           <button
             className="search-button"
             onClick={this.handleSearch}
