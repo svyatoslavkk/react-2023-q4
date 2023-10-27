@@ -33,7 +33,7 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
           image: result.image,
         }));
         this.props.updateResults(results);
-        this.setState({ loading: false });
+        this.setState({ loading: true });
         localStorage.setItem('searchTerm', searchTerm);
       })
       .catch((error) => {
@@ -63,7 +63,6 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
               value={this.state.searchTerm}
               onChange={this.handleInputChange}
             />
-            <label className="form-label">Enter character name</label>
           </div>
           <button
             className="search-button"
