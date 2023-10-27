@@ -1,9 +1,10 @@
-import { Component } from 'react';
+import { ChangeEvent, Component } from 'react';
 import {
   Character,
   SearchComponentProps,
   SearchComponentState,
 } from '../interfaces/interfaces';
+import Spinner from './Spinner';
 
 export class Search extends Component<
   SearchComponentProps,
@@ -67,4 +68,40 @@ export class Search extends Component<
         });
     }
   };
+
+  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ searchTerm: event.target.value });
+  };
+
+  componentDidMount() {
+    const searchTerm = localStorage.getItem('searchTerm') || '';
+    this.setState({ searchTerm });
+  }
+
+  render() {
+    return (
+      <div className="search-component">
+        <div className="input-content">
+          <div className="form-group field">
+            <input
+              type="text"
+              className="form-field"
+              placeholder="Enter character name"
+              value={this.state.searchTerm}
+              onChange={this.handleInputChange}
+            />
+            <label className="form-label">Enter character name</label>
+          </div>
+          <button
+            className="search-button"
+            onClick={this.handleSearch}
+            disabled={this.state.loading}
+          >
+            Search
+          </button>
+        </div>
+        {this.state.loading && <Spinner />}
+      </div>
+    );
+  }
 }
