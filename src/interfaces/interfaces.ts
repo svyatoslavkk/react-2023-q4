@@ -14,3 +14,7 @@ export interface SearchComponentState {
   searchTerm: string;
   loading: boolean;
 }
+
+export interface ResultListProps {
+  results: Character[];
+}
