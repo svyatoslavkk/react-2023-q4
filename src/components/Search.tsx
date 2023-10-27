@@ -33,7 +33,7 @@ export class Search extends Component<
               status: result.status,
               species: result.species,
               image: result.image,
-            })
+            }),
           );
 
           this.props.updateResults(results);
@@ -55,7 +55,7 @@ export class Search extends Component<
               status: result.status,
               species: result.species,
               image: result.image,
-            })
+            }),
           );
           this.props.updateResults(results);
           this.setState({ loading: false });
