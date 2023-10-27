@@ -6,10 +6,7 @@ import {
 } from '../interfaces/interfaces';
 import Spinner from './Spinner';
 
-export class Search extends Component<
-  SearchComponentProps,
-  SearchComponentState
-> {
+class Search extends Component<SearchComponentProps, SearchComponentState> {
   constructor(props: SearchComponentProps) {
     super(props);
     this.state = {
@@ -105,3 +102,5 @@ export class Search extends Component<
     );
   }
 }
+
+export default Search;
