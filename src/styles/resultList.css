@@ -1,0 +1,35 @@
+.fetching-results {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.result-list-item {
+    cursor: pointer;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    width: 232px;
+}
+
+.result-list-item:hover {
+    background-color: rgba(55, 55, 55, 0.5);
+}
+
+.result-list-item-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 1rem;
+}
+
+.result-list-item-text-content {
+    text-align: left;
+}
+
+.result-list-item-name,
+.result-list-item-species {
+    margin: 0;
+}

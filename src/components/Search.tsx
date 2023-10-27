@@ -33,7 +33,7 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
           image: result.image,
         }));
         this.props.updateResults(results);
-        this.setState({ loading: true });
+        this.setState({ loading: false });
         localStorage.setItem('searchTerm', searchTerm);
       })
       .catch((error) => {
