@@ -20,4 +20,5 @@ export interface SearchComponentState {
 export interface ResultListProps {
   results: Character[];
   searchTerm: string;
+  loading: boolean;
 }

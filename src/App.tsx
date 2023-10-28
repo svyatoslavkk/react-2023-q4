@@ -8,6 +8,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 interface AppState {
   searchTerm: string;
   searchResults: Character[];
+  loading: boolean;
 }
 
 class App extends Component<Record<string, never>, AppState> {
@@ -16,6 +17,7 @@ class App extends Component<Record<string, never>, AppState> {
     this.state = {
       searchTerm: '',
       searchResults: [],
+      loading: false,
     };
   }
 
@@ -39,6 +41,7 @@ class App extends Component<Record<string, never>, AppState> {
   };
 
   loadData(searchTerm: string) {
+    this.setState({ loading: true });
     fetch(`https://rickandmortyapi.com/api/character/?name=${searchTerm}`)
       .then((response) => response.json())
       .then((data) => {
@@ -51,9 +54,11 @@ class App extends Component<Record<string, never>, AppState> {
         }));
 
         this.handleFilterChange(results);
+        this.setState({ loading: false });
       })
       .catch((error) => {
         console.error('Error when making an API request: ', error);
+        this.setState({ loading: false });
       });
   }
 
@@ -67,6 +72,7 @@ class App extends Component<Record<string, never>, AppState> {
             onSearchInputChange={this.handleSearchInputChange}
           />
           <ResultList
+            loading={this.state.loading}
             results={this.state.searchResults}
             searchTerm={this.state.searchTerm}
           />

@@ -4,7 +4,6 @@ import {
   SearchComponentProps,
   SearchComponentState,
 } from '../interfaces/interfaces';
-import Spinner from './Spinner';
 
 class Search extends Component<SearchComponentProps, SearchComponentState> {
   constructor(props: SearchComponentProps) {
@@ -70,7 +69,6 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
             Search
           </button>
         </div>
-        {this.state.loading && <Spinner />}
       </div>
     );
   }

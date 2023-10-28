@@ -1,8 +1,9 @@
 .result-list {
     width: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
-    max-width: 1440px;
+    align-items: center;
 }
 
 .fetching-results {
