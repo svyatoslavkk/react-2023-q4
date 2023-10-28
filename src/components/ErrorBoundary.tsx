@@ -35,8 +35,8 @@ export class ErrorBoundary extends Component<
   render() {
     if (this.state.errorInfo) {
       return (
-        <div>
-          <h2>Something went wrong</h2>
+        <div className="error-boundary-block">
+          <h2 className="error-boundary-title">Something went wrong</h2>
           <button onClick={this.resetError}>Reload</button>
         </div>
       );
