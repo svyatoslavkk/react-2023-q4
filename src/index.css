@@ -40,7 +40,6 @@ ul, li {
 
 body {
   margin: 0;
-  display: flex;
 }
 
 h1 {
@@ -71,9 +70,5 @@ button:focus-visible {
 .container {
   width: 100%;
   padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
+  position: absolute;
 }
