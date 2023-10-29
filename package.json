@@ -28,6 +28,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
     "pre-commit": "^1.2.2",
     "prettier": "^3.0.3",
     "typescript": "^5.0.2",
@@ -39,10 +40,12 @@
     }
   },
   "lint-staged": {
-    "*.(ts|tsx|js|jsx)": [
-      "lint:es",
-      "format:fix"
+    "*.{ts,tsx,js,jsx}": [
+      "eslint . --fix --ext ts,tsx,js,jsx --report-unused-disable-directives --max-warnings 0",
+      "npm run lint"
     ]
   },
-  "pre-commit": ["precommit"]
+  "pre-commit": [
+    "precommit"
+  ]
 }
