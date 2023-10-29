@@ -1,0 +1,38 @@
+.search-component {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-content {
+    display: flex;
+    gap: 1rem;
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 498px) {
+    .input-content {
+      flex-direction: column;
+    }
+  
+    .form-field {
+      width: 100%;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+  
+    .search-button,
+    .error-button {
+      width: 100%;
+    }
+  }
+  

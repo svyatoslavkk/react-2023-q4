@@ -1,0 +1,21 @@
+.input-content {
+  width: 100%;
+}
+
+.form-field {
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 1rem;
+  background-color: rgba(55, 55, 55, 1);
+  border-radius: 1.5rem;
+  color: #fff;
+  border: 2px solid transparent;
+  transition: 0.2s ease;
+}
+
+.form-field:hover,
+.form-field:active,
+.form-field:focus {
+  border: 2px solid #ff9d00;
+}

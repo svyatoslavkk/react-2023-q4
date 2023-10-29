@@ -1,0 +1,68 @@
+.result-list {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fetching-results {
+    gap: 1rem;
+    width: 100%;
+}
+
+.result-list-item {
+    cursor: pointer;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+    min-width: 125px;
+}
+
+.result-list-item:hover {
+    background-color: rgba(55, 55, 55, 0.7);
+}
+
+.result-list-item-image {
+    border-radius: 1rem;
+}
+
+.result-list-item-text-content {
+    text-align: left;
+}
+
+.result-list-item-name,
+.result-list-item-species {
+    margin: 0;
+}
+
+@media (min-width: 498px) {
+
+.fetching-results {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+}
+
+@media (min-width: 776px) {
+
+.fetching-results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+}
+
+@media (min-width: 1048px) {
+
+.fetching-results {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+}
