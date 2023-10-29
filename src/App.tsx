@@ -3,7 +3,6 @@ import './App.css';
 import { Character } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
-import { ErrorBoundary } from './components/ErrorBoundary';
 
 interface AppState {
   searchTerm: string;
@@ -71,20 +70,18 @@ class App extends Component<Record<string, never>, AppState> {
 
   render() {
     return (
-      <ErrorBoundary>
-        <div className="container">
-          <Search
-            updateResults={this.handleFilterChange}
-            searchTerm={this.state.searchTerm}
-            onSearchInputChange={this.handleSearchInputChange}
-          />
-          <ResultList
-            loading={this.state.loading}
-            results={this.state.searchResults}
-            searchTerm={this.state.searchTerm}
-          />
-        </div>
-      </ErrorBoundary>
+      <div className="container">
+        <Search
+          updateResults={this.handleFilterChange}
+          searchTerm={this.state.searchTerm}
+          onSearchInputChange={this.handleSearchInputChange}
+        />
+        <ResultList
+          loading={this.state.loading}
+          results={this.state.searchResults}
+          searchTerm={this.state.searchTerm}
+        />
+      </div>
     );
   }
 }
