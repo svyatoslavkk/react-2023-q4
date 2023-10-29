@@ -1,3 +1,5 @@
+import { ReactNode, ErrorInfo } from 'react';
+
 export interface Character {
   id: number;
   name: string;
@@ -21,4 +23,19 @@ export interface ResultListProps {
   results: Character[];
   searchTerm: string;
   loading: boolean;
+}
+
+export interface AppState {
+  searchTerm: string;
+  searchResults: Character[];
+  loading: boolean;
+}
+
+export interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+export interface ErrorBoundaryState {
+  error: Error | null;
+  errorInfo: ErrorInfo | null;
 }

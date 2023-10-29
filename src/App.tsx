@@ -1,14 +1,8 @@
 import { Component } from 'react';
 import './App.css';
-import { Character } from './interfaces/interfaces';
+import { Character, AppState } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
-
-interface AppState {
-  searchTerm: string;
-  searchResults: Character[];
-  loading: boolean;
-}
 
 class App extends Component<Record<string, never>, AppState> {
   constructor(props: Record<string, never>) {
