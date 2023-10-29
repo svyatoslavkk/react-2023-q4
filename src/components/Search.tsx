@@ -11,6 +11,7 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     this.state = {
       searchTerm: '',
       loading: false,
+      error: null,
     };
   }
 
@@ -56,10 +57,30 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     this.setState({ searchTerm });
   }
 
+  handleThrowError = () => {
+    this.throwError();
+  };
+
+  throwError() {
+    this.setState({ error: new Error('Simulated error') });
+  }
+
   render() {
+    const { error } = this.state;
+
+    if (error) {
+      return (
+        <div className="error-boundary-block">
+          <h2 className="error-boundary-title">Something went wrong</h2>
+          <button onClick={this.handleThrowError}>Reload</button>
+        </div>
+      );
+    }
+
     return (
       <div className="search-component">
         <div className="input-content">
+          <button onClick={this.handleThrowError}>Throw an Error</button>
           <input
             type="text"
             className="form-field"

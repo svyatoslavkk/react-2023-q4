@@ -3,6 +3,7 @@ import './App.css';
 import { Character, AppState } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 class App extends Component<Record<string, never>, AppState> {
   constructor(props: Record<string, never>) {
@@ -64,18 +65,20 @@ class App extends Component<Record<string, never>, AppState> {
 
   render() {
     return (
-      <div className="container">
-        <Search
-          updateResults={this.handleFilterChange}
-          searchTerm={this.state.searchTerm}
-          onSearchInputChange={this.handleSearchInputChange}
-        />
-        <ResultList
-          loading={this.state.loading}
-          results={this.state.searchResults}
-          searchTerm={this.state.searchTerm}
-        />
-      </div>
+      <ErrorBoundary>
+        <div className="container">
+          <Search
+            updateResults={this.handleFilterChange}
+            searchTerm={this.state.searchTerm}
+            onSearchInputChange={this.handleSearchInputChange}
+          />
+          <ResultList
+            loading={this.state.loading}
+            results={this.state.searchResults}
+            searchTerm={this.state.searchTerm}
+          />
+        </div>
+      </ErrorBoundary>
     );
   }
 }
