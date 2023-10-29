@@ -4,6 +4,7 @@ import {
   SearchComponentProps,
   SearchComponentState,
 } from '../interfaces/interfaces';
+import { ErrorComponent } from './ErrorComponent';
 
 class Search extends Component<SearchComponentProps, SearchComponentState> {
   constructor(props: SearchComponentProps) {
@@ -44,7 +45,6 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     } catch (error) {
       console.error('Error when making an API request: ', error);
       this.setState({ loading: false });
-      throw error;
     }
   };
 
@@ -62,6 +62,7 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
   };
 
   throwError() {
+    console.error('Simulated error:', new Error('Simulated error'));
     this.setState({ error: new Error('Simulated error') });
   }
 
@@ -73,12 +74,7 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     const { error } = this.state;
 
     if (error) {
-      return (
-        <div className="error-boundary-block">
-          <h2 className="error-boundary-title">Something went wrong</h2>
-          <button onClick={this.handleResetError}>Reload</button>
-        </div>
-      );
+      return <ErrorComponent onReload={this.handleResetError} />;
     }
 
     return (

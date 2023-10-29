@@ -3,6 +3,7 @@ import {
   ErrorBoundaryProps,
   ErrorBoundaryState,
 } from '../interfaces/interfaces';
+import { ErrorComponent } from './ErrorComponent';
 
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
@@ -24,12 +25,7 @@ export class ErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return (
-        <div className="error-boundary-block">
-          <h2 className="error-boundary-title">Something went wrong</h2>
-          <button onClick={this.resetError}>Reload</button>
-        </div>
-      );
+      return <ErrorComponent onReload={this.resetError} />;
     }
     return this.props.children;
   }

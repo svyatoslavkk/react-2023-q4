@@ -10,7 +10,6 @@ export interface Character {
 
 export interface SearchComponentProps {
   updateResults: (results: Character[]) => void;
-  searchTerm: string;
   onSearchInputChange: (searchTerm: string) => void;
 }
 
@@ -22,7 +21,6 @@ export interface SearchComponentState {
 
 export interface ResultListProps {
   results: Character[];
-  searchTerm: string;
   loading: boolean;
 }
 
@@ -41,5 +39,5 @@ export interface ErrorBoundaryState {
 }
 
 export interface ErrorComponentProps {
-  error: Error | null;
+  onReload: () => void;
 }

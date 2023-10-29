@@ -69,13 +69,11 @@ class App extends Component<Record<string, never>, AppState> {
         <div className="container">
           <Search
             updateResults={this.handleFilterChange}
-            searchTerm={this.state.searchTerm}
             onSearchInputChange={this.handleSearchInputChange}
           />
           <ResultList
             loading={this.state.loading}
             results={this.state.searchResults}
-            searchTerm={this.state.searchTerm}
           />
         </div>
       </ErrorBoundary>
