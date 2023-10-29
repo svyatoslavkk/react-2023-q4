@@ -80,7 +80,6 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     return (
       <div className="search-component">
         <div className="input-content">
-          <button onClick={this.handleThrowError}>Throw an Error</button>
           <input
             type="text"
             className="form-field"
@@ -88,13 +87,18 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
             value={this.state.searchTerm}
             onChange={this.handleInputChange}
           />
-          <button
-            className="search-button"
-            onClick={this.handleSearch}
-            disabled={this.state.loading}
-          >
-            Search
-          </button>
+          <div className="button-container">
+            <button
+              className="search-button"
+              onClick={this.handleSearch}
+              disabled={this.state.loading}
+            >
+              Search
+            </button>
+            <button className="error-button" onClick={this.handleThrowError}>
+              Throw an Error
+            </button>
+          </div>
         </div>
       </div>
     );
