@@ -39,3 +39,7 @@ export interface ErrorBoundaryProps {
 export interface ErrorBoundaryState {
   hasError: boolean;
 }
+
+export interface ErrorComponentProps {
+  error: Error | null;
+}

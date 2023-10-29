@@ -65,6 +65,10 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
     this.setState({ error: new Error('Simulated error') });
   }
 
+  handleResetError = () => {
+    this.setState({ error: null });
+  };
+
   render() {
     const { error } = this.state;
 
@@ -72,7 +76,7 @@ class Search extends Component<SearchComponentProps, SearchComponentState> {
       return (
         <div className="error-boundary-block">
           <h2 className="error-boundary-title">Something went wrong</h2>
-          <button onClick={this.handleThrowError}>Reload</button>
+          <button onClick={this.handleResetError}>Reload</button>
         </div>
       );
     }
