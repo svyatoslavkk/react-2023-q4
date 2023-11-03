@@ -8,8 +8,17 @@ export interface Character {
   image: string;
 }
 
-export interface SearchComponentProps {
-  updateResults: (results: Character[]) => void;
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+}
+
+export interface SearchComponentProps extends PaginationProps {
+  updateResults: (
+    results: Character[],
+    currentPage: number,
+    totalPages: number,
+  ) => void;
   onSearchInputChange: (searchTerm: string) => void;
 }
 
@@ -19,7 +28,7 @@ export interface SearchComponentState {
   error: Error | null;
 }
 
-export interface ResultListProps {
+export interface ResultListProps extends PaginationProps {
   results: Character[];
   loading: boolean;
 }

@@ -35,7 +35,7 @@ const Search: React.FC<SearchComponentProps> = (props) => {
         image: result.image,
       }));
 
-      props.updateResults(results);
+      props.updateResults(results, props.currentPage, props.totalPages);
       setLoading(false);
       localStorage.setItem('searchTerm', searchTerm);
     } catch (error) {

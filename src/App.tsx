@@ -9,9 +9,17 @@ const App: React.FC<Record<string, never>> = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const handleFilterChange = (results: Character[]) => {
+  const handleFilterChange = (
+    results: Character[],
+    page: number,
+    pages: number,
+  ) => {
     setSearchResults(results);
+    setCurrentPage(page);
+    setTotalPages(pages);
   };
 
   useEffect(() => {
@@ -26,6 +34,7 @@ const App: React.FC<Record<string, never>> = () => {
 
   const handleSearchInputChange = (searchTerm: string) => {
     setSearchTerm(searchTerm);
+    setCurrentPage(1);
     loadData(searchTerm);
   };
 
@@ -48,8 +57,9 @@ const App: React.FC<Record<string, never>> = () => {
         species: result.species,
         image: result.image,
       }));
+      const pages = data.info.pages;
 
-      handleFilterChange(results);
+      handleFilterChange(results, currentPage, pages);
       setLoading(false);
       localStorage.setItem('searchTerm', searchTerm);
     } catch (error) {
@@ -65,8 +75,15 @@ const App: React.FC<Record<string, never>> = () => {
         <Search
           updateResults={handleFilterChange}
           onSearchInputChange={handleSearchInputChange}
+          currentPage={currentPage}
+          totalPages={totalPages}
         />
-        <ResultList loading={loading} results={searchResults} />
+        <ResultList
+          loading={loading}
+          results={searchResults}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
       </div>
     </ErrorBoundary>
   );
