@@ -2,7 +2,6 @@ import React from 'react';
 import { ResultListProps } from '../interfaces/interfaces';
 import Spinner from './Spinner';
 import Pagination from './Pagination';
-import LikeIcon from '../icons/likeIcon';
 
 const ResultList: React.FC<ResultListProps> = (props) => {
   const { currentPage, totalPages, allCharacters } = props;
@@ -20,14 +19,11 @@ const ResultList: React.FC<ResultListProps> = (props) => {
                 <img
                   className="result-list-item-image"
                   src={result.image}
-                  alt={result.firstName}
+                  alt="Character Image"
                 />
                 <div className="result-list-item-text-content">
-                  <h3 className="result-list-item-name">{result.title}</h3>
-                  <div className="result-list-item-likes">
-                    <LikeIcon />
-                    <p className="number-of=likes">{result.likes}</p>
-                  </div>
+                  <h3 className="result-list-item-name">{result.name}</h3>
+                  <p className="result-list-item-species">{result.species}</p>
                 </div>
               </li>
             ))}
