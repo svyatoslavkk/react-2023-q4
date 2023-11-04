@@ -4,13 +4,57 @@ import { Character } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { useLocation } from 'react-router-dom';
 
 const App: React.FC<Record<string, never>> = () => {
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
+  const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const searchParams = new URLSearchParams(location.search);
+  const page = parseInt(searchParams.get('page') || '1', 10);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+
+        const response = await fetch(
+          `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=10`,
+        );
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        const results: Character[] = data.results.map((result: Character) => ({
+          id: result.id,
+          name: result.name,
+          status: result.status,
+          species: result.species,
+          image: result.image,
+        }));
+
+        setAllCharacters(results);
+        setCurrentPage(page);
+
+        setLoading(false);
+        localStorage.setItem('searchTerm', searchTerm);
+      } catch (error) {
+        console.error('Ошибка при выполнении API-запроса: ', error);
+        setLoading(false);
+        throw error;
+      }
+    }
+
+    fetchData();
+  }, [location.search, searchTerm]);
 
   const handleFilterChange = (
     results: Character[],
@@ -42,7 +86,7 @@ const App: React.FC<Record<string, never>> = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${searchTerm}`,
+        `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=10`,
       );
 
       if (!response.ok) {
@@ -83,6 +127,7 @@ const App: React.FC<Record<string, never>> = () => {
           results={searchResults}
           currentPage={currentPage}
           totalPages={totalPages}
+          allCharacters={allCharacters}
         />
       </div>
     </ErrorBoundary>

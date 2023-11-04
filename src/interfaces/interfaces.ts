@@ -31,6 +31,7 @@ export interface SearchComponentState {
 export interface ResultListProps extends PaginationProps {
   results: Character[];
   loading: boolean;
+  allCharacters: Character[];
 }
 
 export interface AppState {

@@ -4,7 +4,7 @@ import Spinner from './Spinner';
 import Pagination from './Pagination';
 
 const ResultList: React.FC<ResultListProps> = (props) => {
-  const { currentPage, totalPages } = props;
+  const { currentPage, totalPages, allCharacters } = props;
 
   return (
     <>
@@ -14,7 +14,7 @@ const ResultList: React.FC<ResultListProps> = (props) => {
           <Spinner />
         ) : (
           <ul className="fetching-results">
-            {props.results.map((result, index) => (
+            {allCharacters.map((result, index) => (
               <li className="result-list-item" key={index}>
                 <img
                   className="result-list-item-image"
