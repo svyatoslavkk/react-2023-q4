@@ -49,6 +49,10 @@ h1 {
   line-height: 1.1;
 }
 
+img {
+  object-fit: cover;
+}
+
 button {
   border-radius: 1.5rem;
   border: 2px solid transparent;

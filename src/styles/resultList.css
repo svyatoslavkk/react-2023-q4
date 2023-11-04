@@ -29,6 +29,7 @@
 
 .result-list-item-image {
     border-radius: 1rem;
+    height: 200px;
 }
 
 .result-list-item-text-content {
@@ -38,6 +39,12 @@
 .result-list-item-name,
 .result-list-item-species {
     margin: 0;
+}
+
+.result-list-item-likes {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
 }
 
 @media (min-width: 498px) {
