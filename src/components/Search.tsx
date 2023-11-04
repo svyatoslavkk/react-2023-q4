@@ -19,7 +19,12 @@ const Search: React.FC<SearchComponentProps> = (props) => {
       props.onSearchInputChange(searchTerm);
 
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${searchTerm}`,
+        `https://dummyapi.io/data/v1/post?tags=${searchTerm}`,
+        {
+          headers: {
+            'app-id': '6545494498239d80ad063841',
+          },
+        },
       );
 
       if (!response.ok) {
@@ -27,11 +32,9 @@ const Search: React.FC<SearchComponentProps> = (props) => {
       }
 
       const data = await response.json();
-      const results: Character[] = data.results.map((result: Character) => ({
+      const results: Character[] = data.data.map((result: Character) => ({
         id: result.id,
-        name: result.name,
-        status: result.status,
-        species: result.species,
+        firstName: result.owner.firstName,
         image: result.image,
       }));
 

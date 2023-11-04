@@ -3,6 +3,7 @@
 @import url(./styles/input.css);
 @import url(./styles/resultList.css);
 @import url(./styles/errorBoundary.css);
+@import url(./styles/pagination.css);
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -46,6 +47,10 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+img {
+  object-fit: cover;
 }
 
 button {

@@ -3,9 +3,17 @@ import { ReactNode } from 'react';
 export interface Character {
   id: number;
   name: string;
+  firstName: string;
+  owner: {
+    firstName: string;
+  };
+  title: string;
+  text: string;
+  likes: number;
   status: string;
   species: string;
   image: string;
+  poster: string;
 }
 
 export interface PaginationProps {
