@@ -130,22 +130,24 @@ const App: React.FC<Record<string, never>> = () => {
 
   return (
     <ErrorBoundary>
-      <div className="container">
-        <Search
-          updateResults={handleFilterChange}
-          onSearchInputChange={handleSearchInputChange}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
-        <ResultList
-          loading={loading}
-          results={searchResults}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          allCharacters={allCharacters}
-          onItemSelect={handleItemClick}
-          showDetails={showDetails}
-        />
+      <div className="container main-page">
+        <div className="main-content">
+          <Search
+            updateResults={handleFilterChange}
+            onSearchInputChange={handleSearchInputChange}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
+          <ResultList
+            loading={loading}
+            results={searchResults}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            allCharacters={allCharacters}
+            onItemSelect={handleItemClick}
+            showDetails={showDetails}
+          />
+        </div>
         {showDetails && (
           <Details
             selectedCharacter={selectedCharacter}

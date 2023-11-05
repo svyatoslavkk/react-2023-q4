@@ -4,6 +4,7 @@
 @import url(./styles/resultList.css);
 @import url(./styles/errorBoundary.css);
 @import url(./styles/pagination.css);
+@import url(./styles/details.css);
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -77,4 +78,13 @@ button:focus-visible {
   width: 100%;
   padding: 1.5rem;
   position: absolute;
+}
+
+.container.main-page {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.main-content {
+  flex: 1;
 }
