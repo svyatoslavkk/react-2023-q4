@@ -1,17 +1,13 @@
-import { Component } from 'react';
+import React from 'react';
 import { ErrorComponentProps } from '../interfaces/interfaces';
 
-export class ErrorComponent extends Component<ErrorComponentProps> {
-  handleResetError = () => {
-    this.setState({ error: null });
-  };
+const ErrorComponent: React.FC<ErrorComponentProps> = (props) => {
+  return (
+    <div className="error-boundary-block">
+      <h2 className="error-boundary-title">Something went wrong</h2>
+      <button onClick={props.onReload}>Reload</button>
+    </div>
+  );
+};
 
-  render() {
-    return (
-      <div className="error-boundary-block">
-        <h2 className="error-boundary-title">Something went wrong</h2>
-        <button onClick={this.props.onReload}>Reload</button>
-      </div>
-    );
-  }
-}
+export default ErrorComponent;

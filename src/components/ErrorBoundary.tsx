@@ -3,7 +3,7 @@ import {
   ErrorBoundaryProps,
   ErrorBoundaryState,
 } from '../interfaces/interfaces';
-import { ErrorComponent } from './ErrorComponent';
+import ErrorComponent from './ErrorComponent';
 
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,

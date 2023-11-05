@@ -3,13 +3,35 @@ import { ReactNode } from 'react';
 export interface Character {
   id: number;
   name: string;
+  gender: string;
+  location: {
+    name: string;
+  };
+  title: string;
+  text: string;
+  likes: number;
   status: string;
   species: string;
   image: string;
+  poster: string;
 }
 
-export interface SearchComponentProps {
-  updateResults: (results: Character[]) => void;
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+}
+
+export interface DetailsProps {
+  selectedCharacter: Character | null;
+  onCloseDetails: () => void;
+}
+
+export interface SearchComponentProps extends PaginationProps {
+  updateResults: (
+    results: Character[],
+    currentPage: number,
+    totalPages: number,
+  ) => void;
   onSearchInputChange: (searchTerm: string) => void;
 }
 
@@ -19,9 +41,12 @@ export interface SearchComponentState {
   error: Error | null;
 }
 
-export interface ResultListProps {
+export interface ResultListProps extends PaginationProps {
   results: Character[];
   loading: boolean;
+  allCharacters: Character[];
+  onItemSelect: (character: Character) => void;
+  showDetails: boolean;
 }
 
 export interface AppState {

@@ -3,6 +3,8 @@
 @import url(./styles/input.css);
 @import url(./styles/resultList.css);
 @import url(./styles/errorBoundary.css);
+@import url(./styles/pagination.css);
+@import url(./styles/details.css);
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -48,6 +50,10 @@ h1 {
   line-height: 1.1;
 }
 
+img {
+  object-fit: cover;
+}
+
 button {
   border-radius: 1.5rem;
   border: 2px solid transparent;
@@ -73,3 +79,35 @@ button:focus-visible {
   padding: 1.5rem;
   position: absolute;
 }
+
+.container.main-page {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.main-content {
+  flex: 1;
+  z-index: 99;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: block;
+}
+
+/* .details {
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  display: none;
+} */
+

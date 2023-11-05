@@ -1,17 +1,25 @@
-import { Component } from 'react';
+import React from 'react';
 import { ResultListProps } from '../interfaces/interfaces';
 import Spinner from './Spinner';
+import Pagination from './Pagination';
 
-class ResultList extends Component<ResultListProps> {
-  render() {
-    return (
+const ResultList: React.FC<ResultListProps> = (props) => {
+  const { currentPage, totalPages, allCharacters } = props;
+
+  return (
+    <>
+      <Pagination currentPage={currentPage} totalPages={totalPages} />
       <div className="result-list">
-        {this.props.loading ? (
+        {props.loading ? (
           <Spinner />
         ) : (
           <ul className="fetching-results">
-            {this.props.results.map((result, index) => (
-              <li className="result-list-item" key={index}>
+            {allCharacters.map((result, index) => (
+              <li
+                className="result-list-item"
+                key={index}
+                onClick={() => props.onItemSelect(result)}
+              >
                 <img
                   className="result-list-item-image"
                   src={result.image}
@@ -26,8 +34,8 @@ class ResultList extends Component<ResultListProps> {
           </ul>
         )}
       </div>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default ResultList;

@@ -1,44 +1,105 @@
-import { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Character, AppState } from './interfaces/interfaces';
+import { Character } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 
-class App extends Component<Record<string, never>, AppState> {
-  constructor(props: Record<string, never>) {
-    super(props);
-    this.state = {
-      searchTerm: '',
-      searchResults: [],
-      loading: false,
-    };
-  }
+const App: React.FC<Record<string, never>> = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<Character[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [allCharacters, setAllCharacters] = useState<Character[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  handleFilterChange = (results: Character[]) => {
-    this.setState({ searchResults: results });
+  const [showDetails, setShowDetails] = useState(false);
+
+  const searchParams = new URLSearchParams(location.search);
+  const page = parseInt(searchParams.get('page') || '1', 10);
+
+  const handleItemClick = (character: Character) => {
+    navigate(`/character/${character.id}`);
+    setShowDetails(true);
   };
 
-  componentDidMount() {
+  const handleCloseDetails = () => {
+    navigate('/');
+    setShowDetails(false);
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+
+        const response = await fetch(
+          `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=30`,
+        );
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        const results: Character[] = data.results.map((result: Character) => ({
+          id: result.id,
+          name: result.name,
+          status: result.status,
+          species: result.species,
+          image: result.image,
+        }));
+
+        setAllCharacters(results);
+        setCurrentPage(page);
+
+        setLoading(false);
+        localStorage.setItem('searchTerm', searchTerm);
+      } catch (error) {
+        console.error('Ошибка при выполнении API-запроса: ', error);
+        setLoading(false);
+        throw error;
+      }
+    }
+
+    fetchData();
+  }, [location.search, searchTerm]);
+
+  const handleFilterChange = (
+    results: Character[],
+    page: number,
+    pages: number,
+  ) => {
+    setSearchResults(results);
+    setCurrentPage(page);
+    setTotalPages(pages);
+  };
+
+  useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
-      this.setState({ searchTerm: savedSearchTerm });
-      this.loadData(savedSearchTerm);
+      setSearchTerm(savedSearchTerm);
+      loadData(savedSearchTerm);
     } else {
-      this.loadData(this.state.searchTerm);
+      loadData(searchTerm);
     }
-  }
+  }, []);
 
-  handleSearchInputChange = (searchTerm: string) => {
-    this.setState({ searchTerm });
-    this.loadData(searchTerm);
+  const handleSearchInputChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
+    setCurrentPage(1);
+    loadData(searchTerm);
   };
 
-  async loadData(searchTerm: string) {
+  async function loadData(searchTerm: string) {
     try {
-      this.setState({ loading: true });
+      setLoading(true);
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${searchTerm}`,
+        `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=10`,
       );
 
       if (!response.ok) {
@@ -53,32 +114,45 @@ class App extends Component<Record<string, never>, AppState> {
         species: result.species,
         image: result.image,
       }));
+      const pages = data.info.pages;
 
-      this.handleFilterChange(results);
-      this.setState({ loading: false });
+      handleFilterChange(results, currentPage, pages);
+      setLoading(false);
+      localStorage.setItem('searchTerm', searchTerm);
     } catch (error) {
-      console.error('Error when making an API request: ', error);
-      this.setState({ loading: false });
+      console.error('Ошибка при выполнении API-запроса: ', error);
+      setLoading(false);
       throw error;
     }
   }
 
-  render() {
-    return (
-      <ErrorBoundary>
-        <div className="container">
+  return (
+    <ErrorBoundary>
+      <div className={`container main-page ${showDetails ? 'overlay' : ''}`}>
+        <div className={`main-content ${showDetails ? 'details' : ''}`}>
           <Search
-            updateResults={this.handleFilterChange}
-            onSearchInputChange={this.handleSearchInputChange}
+            updateResults={handleFilterChange}
+            onSearchInputChange={handleSearchInputChange}
+            currentPage={currentPage}
+            totalPages={totalPages}
           />
           <ResultList
-            loading={this.state.loading}
-            results={this.state.searchResults}
+            loading={loading}
+            results={searchResults}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            allCharacters={allCharacters}
+            onItemSelect={handleItemClick}
+            showDetails={showDetails}
           />
         </div>
-      </ErrorBoundary>
-    );
-  }
-}
+        {showDetails && (
+          <div className="overlay" onClick={handleCloseDetails}></div>
+        )}
+        {showDetails && <Outlet />}
+      </div>
+    </ErrorBoundary>
+  );
+};
 
 export default App;

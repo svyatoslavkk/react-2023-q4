@@ -1,20 +1,13 @@
-import { Component } from 'react';
+import React from 'react';
 
-class Spinner extends Component {
-  render() {
-    return (
-      <div className="dot-spinner">
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-      </div>
-    );
-  }
-}
+const Spinner: React.FC = () => {
+  return (
+    <div className="dot-spinner">
+      {[...Array(8)].map((_, index) => (
+        <div key={index} className="dot-spinner__dot"></div>
+      ))}
+    </div>
+  );
+};
 
 export default Spinner;
