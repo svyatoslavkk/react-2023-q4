@@ -3,34 +3,27 @@ import './App.css';
 import { Character } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
-import Details from './components/Details';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 
 const App: React.FC<Record<string, never>> = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
   const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
-    null,
-  );
+
   const [showDetails, setShowDetails] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const page = parseInt(searchParams.get('page') || '1', 10);
 
   const handleItemClick = (character: Character) => {
-    setSelectedCharacter(character);
+    navigate(`/character/${character.id}`);
     setShowDetails(true);
-  };
-
-  const handleCloseDetails = () => {
-    setSelectedCharacter(null);
-    setShowDetails(false);
   };
 
   useEffect(() => {
@@ -148,12 +141,7 @@ const App: React.FC<Record<string, never>> = () => {
             showDetails={showDetails}
           />
         </div>
-        {showDetails && (
-          <Details
-            selectedCharacter={selectedCharacter}
-            onCloseDetails={handleCloseDetails}
-          />
-        )}
+        {showDetails && <Outlet />}
       </div>
     </ErrorBoundary>
   );
