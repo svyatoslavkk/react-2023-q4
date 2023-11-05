@@ -36,7 +36,11 @@ const Details = () => {
   };
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className="details">
+        <Spinner />
+      </div>
+    );
   }
 
   if (character) {
