@@ -21,6 +21,11 @@ export interface PaginationProps {
   totalPages: number;
 }
 
+export interface DetailsProps {
+  selectedCharacter: Character | null;
+  onCloseDetails: () => void;
+}
+
 export interface SearchComponentProps extends PaginationProps {
   updateResults: (
     results: Character[],
@@ -40,6 +45,8 @@ export interface ResultListProps extends PaginationProps {
   results: Character[];
   loading: boolean;
   allCharacters: Character[];
+  onItemSelect: (character: Character) => void;
+  showDetails: boolean;
 }
 
 export interface AppState {

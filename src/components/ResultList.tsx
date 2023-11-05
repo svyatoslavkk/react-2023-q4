@@ -15,7 +15,11 @@ const ResultList: React.FC<ResultListProps> = (props) => {
         ) : (
           <ul className="fetching-results">
             {allCharacters.map((result, index) => (
-              <li className="result-list-item" key={index}>
+              <li
+                className="result-list-item"
+                key={index}
+                onClick={() => props.onItemSelect(result)}
+              >
                 <img
                   className="result-list-item-image"
                   src={result.image}

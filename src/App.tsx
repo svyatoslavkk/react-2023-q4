@@ -3,6 +3,7 @@ import './App.css';
 import { Character } from './interfaces/interfaces';
 import Search from './components/Search';
 import ResultList from './components/ResultList';
+import Details from './components/Details';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useLocation } from 'react-router-dom';
 
@@ -14,9 +15,23 @@ const App: React.FC<Record<string, never>> = () => {
   const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+    null,
+  );
+  const [showDetails, setShowDetails] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const page = parseInt(searchParams.get('page') || '1', 10);
+
+  const handleItemClick = (character: Character) => {
+    setSelectedCharacter(character);
+    setShowDetails(true);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedCharacter(null);
+    setShowDetails(false);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -128,7 +143,15 @@ const App: React.FC<Record<string, never>> = () => {
           currentPage={currentPage}
           totalPages={totalPages}
           allCharacters={allCharacters}
+          onItemSelect={handleItemClick}
+          showDetails={showDetails}
         />
+        {showDetails && (
+          <Details
+            selectedCharacter={selectedCharacter}
+            onCloseDetails={handleCloseDetails}
+          />
+        )}
       </div>
     </ErrorBoundary>
   );
