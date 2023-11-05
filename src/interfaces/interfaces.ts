@@ -3,9 +3,9 @@ import { ReactNode } from 'react';
 export interface Character {
   id: number;
   name: string;
-  firstName: string;
-  owner: {
-    firstName: string;
+  gender: string;
+  location: {
+    name: string;
   };
   title: string;
   text: string;

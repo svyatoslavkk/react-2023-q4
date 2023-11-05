@@ -20,6 +20,7 @@ const Details = () => {
           throw new Error('API request failed');
         }
         const data = await response.json();
+        console.log('DETAILS', data);
         setCharacter(data);
       } catch (error) {
         console.error('Ошибка при выполнении API-запроса: ', error);
@@ -52,6 +53,8 @@ const Details = () => {
           src={character.image}
           alt="Character Image"
         />
+        <p>Gender: {character.gender}</p>
+        <p>Location: {character.location.name}</p>
         <p>Status: {character.status}</p>
         <p>Species: {character.species}</p>
         <button onClick={handleCloseDetails}>Close Details</button>
