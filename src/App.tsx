@@ -32,7 +32,7 @@ const App: React.FC<Record<string, never>> = () => {
         setLoading(true);
 
         const response = await fetch(
-          `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=10`,
+          `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=30`,
         );
 
         if (!response.ok) {
