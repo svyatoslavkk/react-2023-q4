@@ -26,6 +26,11 @@ const App: React.FC<Record<string, never>> = () => {
     setShowDetails(true);
   };
 
+  const handleCloseDetails = () => {
+    navigate('/');
+    setShowDetails(false);
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -123,8 +128,8 @@ const App: React.FC<Record<string, never>> = () => {
 
   return (
     <ErrorBoundary>
-      <div className="container main-page">
-        <div className="main-content">
+      <div className={`container main-page ${showDetails ? 'overlay' : ''}`}>
+        <div className={`main-content ${showDetails ? 'details' : ''}`}>
           <Search
             updateResults={handleFilterChange}
             onSearchInputChange={handleSearchInputChange}
@@ -141,6 +146,9 @@ const App: React.FC<Record<string, never>> = () => {
             showDetails={showDetails}
           />
         </div>
+        {showDetails && (
+          <div className="overlay" onClick={handleCloseDetails}></div>
+        )}
         {showDetails && <Outlet />}
       </div>
     </ErrorBoundary>
