@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Character, SearchComponentProps } from '../interfaces/interfaces';
+import { SearchComponentProps } from '../interfaces/interfaces';
+import { fetchCharacters } from '../services/services';
 import ErrorComponent from './ErrorComponent';
 
 const Search: React.FC<SearchComponentProps> = (props) => {
@@ -16,26 +17,9 @@ const Search: React.FC<SearchComponentProps> = (props) => {
     try {
       setLoading(true);
 
-      props.onSearchInputChange(searchTerm);
+      const { results, pages } = await fetchCharacters(searchTerm, 1, 10);
 
-      const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${searchTerm}`,
-      );
-
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
-
-      const data = await response.json();
-      const results: Character[] = data.results.map((result: Character) => ({
-        id: result.id,
-        name: result.name,
-        status: result.status,
-        species: result.species,
-        image: result.image,
-      }));
-
-      props.updateResults(results, props.currentPage, data.info.pages);
+      props.updateResults(results, props.currentPage, pages);
       setLoading(false);
       localStorage.setItem('searchTerm', searchTerm);
     } catch (error) {
