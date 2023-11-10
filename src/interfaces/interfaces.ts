@@ -66,3 +66,14 @@ export interface ErrorBoundaryState {
 export interface ErrorComponentProps {
   onReload: () => void;
 }
+
+export interface MainContextProps {
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  allCharacters: Character[];
+  setAllCharacters: (value: Character[]) => void;
+}
+
+export interface MainProviderProps {
+  children: ReactNode;
+}

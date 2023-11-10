@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Character } from '../interfaces/interfaces';
 import Search from '../components/Search';
 import ResultList from '../components/ResultList';
+import { useMainContext } from '../context/MainContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 
 const MainPage: React.FC<Record<string, never>> = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
-  const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const [showDetails, setShowDetails] = useState(false);
+
+  const { searchTerm, setSearchTerm, allCharacters, setAllCharacters } =
+    useMainContext();
 
   const searchParams = new URLSearchParams(location.search);
   const page = parseInt(searchParams.get('page') || '1', 10);
