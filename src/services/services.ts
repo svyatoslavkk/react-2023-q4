@@ -1,6 +1,6 @@
 import { Character } from '../interfaces/interfaces';
 
-export async function fetchData(
+export async function fetchCharacters(
   searchTerm: string,
   page: number,
   perPage: number,

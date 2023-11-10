@@ -4,6 +4,7 @@ import Search from '../components/Search';
 import ResultList from '../components/ResultList';
 import { useMainContext } from '../context/MainContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { fetchCharacters } from '../services/services';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 
 const MainPage: React.FC<Record<string, never>> = () => {
@@ -33,41 +34,22 @@ const MainPage: React.FC<Record<string, never>> = () => {
   };
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchDataAndHandle() {
       try {
         setLoading(true);
-
-        const response = await fetch(
-          `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=30`,
-        );
-
-        if (!response.ok) {
-          throw new Error('API request failed');
-        }
-
-        const data = await response.json();
-        console.log(data);
-        const results: Character[] = data.results.map((result: Character) => ({
-          id: result.id,
-          name: result.name,
-          status: result.status,
-          species: result.species,
-          image: result.image,
-        }));
-
+        const { results } = await fetchCharacters(searchTerm, page, 30);
         setAllCharacters(results);
         setCurrentPage(page);
-
         setLoading(false);
         localStorage.setItem('searchTerm', searchTerm);
       } catch (error) {
-        console.error('Ошибка при выполнении API-запроса: ', error);
+        console.error('Error in fetchDataAndHandle: ', error);
         setLoading(false);
         throw error;
       }
     }
 
-    fetchData();
+    fetchDataAndHandle();
   }, [location.search, searchTerm]);
 
   const handleFilterChange = (
@@ -99,29 +81,12 @@ const MainPage: React.FC<Record<string, never>> = () => {
   async function loadData(searchTerm: string) {
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=10`,
-      );
-
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
-
-      const data = await response.json();
-      const results: Character[] = data.results.map((result: Character) => ({
-        id: result.id,
-        name: result.name,
-        status: result.status,
-        species: result.species,
-        image: result.image,
-      }));
-      const pages = data.info.pages;
-
+      const { results, pages } = await fetchCharacters(searchTerm, page, 10);
       handleFilterChange(results, currentPage, pages);
       setLoading(false);
       localStorage.setItem('searchTerm', searchTerm);
     } catch (error) {
-      console.error('Ошибка при выполнении API-запроса: ', error);
+      console.error('Error in loadData: ', error);
       setLoading(false);
       throw error;
     }
