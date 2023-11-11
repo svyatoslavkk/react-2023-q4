@@ -9,11 +9,9 @@ export interface Character {
   };
   title: string;
   text: string;
-  likes: number;
   status: string;
   species: string;
   image: string;
-  poster: string;
 }
 
 export interface PaginationProps {
