@@ -101,6 +101,7 @@ const MainPage: React.FC<Record<string, never>> = () => {
             onSearchInputChange={handleSearchInputChange}
             currentPage={currentPage}
             totalPages={totalPages}
+            navigate={navigate}
           />
           <ResultList
             loading={loading}
@@ -110,6 +111,7 @@ const MainPage: React.FC<Record<string, never>> = () => {
             allCharacters={allCharacters}
             onItemSelect={handleItemClick}
             showDetails={showDetails}
+            navigate={() => {}}
           />
         </div>
         {showDetails && (

@@ -17,6 +17,7 @@ export interface Character {
 export interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  navigate: (path: string) => void;
 }
 
 export interface DetailsProps {
@@ -31,6 +32,7 @@ export interface SearchComponentProps extends PaginationProps {
     totalPages: number,
   ) => void;
   onSearchInputChange: (searchTerm: string) => void;
+  navigate: (path: string) => void;
 }
 
 export interface SearchComponentState {

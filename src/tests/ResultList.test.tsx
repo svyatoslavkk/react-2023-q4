@@ -39,6 +39,7 @@ describe('ResultList Component', () => {
         showDetails={false}
         currentPage={1}
         totalPages={1}
+        navigate={() => {}}
       />,
     );
     const spinnerElement = screen.getByTestId('spinner');
@@ -55,6 +56,7 @@ describe('ResultList Component', () => {
         showDetails={false}
         currentPage={1}
         totalPages={1}
+        navigate={() => {}}
       />,
     );
     const resultItems = screen.getAllByRole('listitem');
@@ -73,6 +75,7 @@ describe('ResultList Component', () => {
         showDetails={false}
         currentPage={1}
         totalPages={1}
+        navigate={() => {}}
       />,
     );
 

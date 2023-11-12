@@ -4,11 +4,15 @@ import Spinner from './Spinner';
 import Pagination from './Pagination';
 
 const ResultList: React.FC<ResultListProps> = (props) => {
-  const { currentPage, totalPages, allCharacters } = props;
+  const { currentPage, totalPages, allCharacters, navigate } = props;
 
   return (
     <>
-      <Pagination currentPage={currentPage} totalPages={totalPages} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        navigate={navigate}
+      />
       <div className="result-list">
         {props.loading ? (
           <Spinner />

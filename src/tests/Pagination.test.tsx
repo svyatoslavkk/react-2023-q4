@@ -4,7 +4,7 @@ import Pagination from '../components/Pagination';
 
 describe('Pagination Component', () => {
   it('renders correctly', () => {
-    render(<Pagination currentPage={1} totalPages={5} />, {
+    render(<Pagination currentPage={1} totalPages={5} navigate={() => {}} />, {
       wrapper: MemoryRouter,
     });
     const paginationElement = screen.getByRole('list', { name: /pagination/i });
@@ -12,7 +12,7 @@ describe('Pagination Component', () => {
   });
 
   it('disables "Prev" button on the first page', () => {
-    render(<Pagination currentPage={1} totalPages={5} />, {
+    render(<Pagination currentPage={1} totalPages={5} navigate={() => {}} />, {
       wrapper: MemoryRouter,
     });
     const prevButton = screen.getByRole('button', { name: /prev/i });
@@ -20,7 +20,7 @@ describe('Pagination Component', () => {
   });
 
   it('disables "Next" button on the last page', () => {
-    render(<Pagination currentPage={5} totalPages={5} />, {
+    render(<Pagination currentPage={5} totalPages={5} navigate={() => {}} />, {
       wrapper: MemoryRouter,
     });
     const nextButton = screen.getByRole('button', { name: /next/i });
@@ -28,7 +28,7 @@ describe('Pagination Component', () => {
   });
 
   it('enables "Prev" button on pages other than the first', () => {
-    render(<Pagination currentPage={3} totalPages={5} />, {
+    render(<Pagination currentPage={3} totalPages={5} navigate={() => {}} />, {
       wrapper: MemoryRouter,
     });
     const prevButton = screen.getByRole('button', { name: /prev/i });
@@ -36,7 +36,7 @@ describe('Pagination Component', () => {
   });
 
   it('enables "Next" button on pages other than the last', () => {
-    render(<Pagination currentPage={3} totalPages={5} />, {
+    render(<Pagination currentPage={3} totalPages={5} navigate={() => {}} />, {
       wrapper: MemoryRouter,
     });
     const nextButton = screen.getByRole('button', { name: /next/i });
@@ -44,21 +44,34 @@ describe('Pagination Component', () => {
   });
 
   it('calls handlePageChange when a page button is clicked', () => {
-    const handlePageChangeMock = jest.fn();
-    render(<Pagination currentPage={3} totalPages={5} />, {
-      wrapper: MemoryRouter,
-    });
+    const mockNavigate = jest.fn();
+    render(
+      <Pagination currentPage={3} totalPages={5} navigate={mockNavigate} />,
+    );
 
     fireEvent.click(screen.getByRole('button', { name: '4' }));
 
-    expect(handlePageChangeMock).toHaveBeenCalledWith(4);
+    expect(mockNavigate).toHaveBeenCalledWith('?page=4');
   });
 
-  it('calls navigate with the correct page when a page button is clicked', () => {
+  it('calls handlePageChange when "Prev" button is clicked', () => {
     const mockNavigate = jest.fn();
-    render(<Pagination currentPage={3} totalPages={5} />);
+    render(
+      <Pagination currentPage={3} totalPages={5} navigate={mockNavigate} />,
+    );
 
-    fireEvent.click(screen.getByRole('button', { name: '4' }));
+    fireEvent.click(screen.getByRole('button', { name: /prev/i }));
+
+    expect(mockNavigate).toHaveBeenCalledWith('?page=2');
+  });
+
+  it('calls handlePageChange when "Next" button is clicked', () => {
+    const mockNavigate = jest.fn();
+    render(
+      <Pagination currentPage={3} totalPages={5} navigate={mockNavigate} />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /next/i }));
 
     expect(mockNavigate).toHaveBeenCalledWith('?page=4');
   });

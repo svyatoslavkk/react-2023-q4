@@ -8,12 +8,14 @@ jest.mock('../services/services');
 describe('Search component', () => {
   it('should handle search and update results', async () => {
     const mockUpdateResults = jest.fn();
+    const mockNavigate = jest.fn();
     render(
       <Search
         currentPage={1}
         totalPages={1}
         updateResults={mockUpdateResults}
         onSearchInputChange={() => {}}
+        navigate={mockNavigate}
       />,
     );
 
@@ -31,12 +33,14 @@ describe('Search component', () => {
 
   it('should handle error when making an API request', async () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
+    const mockNavigate = jest.fn();
     const { getByText } = render(
       <Search
         currentPage={1}
         totalPages={1}
         updateResults={() => {}}
         onSearchInputChange={() => {}}
+        navigate={mockNavigate}
       />,
     );
     const errorButton = getByText('Throw an Error');
@@ -51,12 +55,14 @@ describe('Search component', () => {
 
   it('should handle reset error', () => {
     const mockResetError = jest.fn();
+    const mockNavigate = jest.fn();
     render(
       <Search
         currentPage={1}
         totalPages={1}
         updateResults={() => {}}
         onSearchInputChange={() => {}}
+        navigate={mockNavigate}
       />,
     );
 
@@ -68,12 +74,14 @@ describe('Search component', () => {
   });
 
   it('should disable Search button during loading', async () => {
+    const mockNavigate = jest.fn();
     const { getByText, getByPlaceholderText } = render(
       <Search
         currentPage={1}
         totalPages={1}
         updateResults={() => {}}
         onSearchInputChange={() => {}}
+        navigate={mockNavigate}
       />,
     );
     const input = getByPlaceholderText(
