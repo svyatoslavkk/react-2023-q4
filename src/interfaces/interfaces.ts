@@ -9,16 +9,15 @@ export interface Character {
   };
   title: string;
   text: string;
-  likes: number;
   status: string;
   species: string;
   image: string;
-  poster: string;
 }
 
 export interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  navigate: (path: string) => void;
 }
 
 export interface DetailsProps {
@@ -33,6 +32,7 @@ export interface SearchComponentProps extends PaginationProps {
     totalPages: number,
   ) => void;
   onSearchInputChange: (searchTerm: string) => void;
+  navigate: (path: string) => void;
 }
 
 export interface SearchComponentState {
@@ -44,7 +44,6 @@ export interface SearchComponentState {
 export interface ResultListProps extends PaginationProps {
   results: Character[];
   loading: boolean;
-  allCharacters: Character[];
   onItemSelect: (character: Character) => void;
   showDetails: boolean;
 }
@@ -65,4 +64,15 @@ export interface ErrorBoundaryState {
 
 export interface ErrorComponentProps {
   onReload: () => void;
+}
+
+export interface MainContextProps {
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  allCharacters: Character[];
+  setAllCharacters: (value: Character[]) => void;
+}
+
+export interface MainProviderProps {
+  children: ReactNode;
 }
