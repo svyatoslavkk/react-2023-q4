@@ -1,6 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import '@testing-library/jest-dom';
 import Pagination from '../components/Pagination';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => jest.fn(),
+}));
 
 describe('Pagination Component', () => {
   it('renders correctly', () => {
@@ -55,24 +61,32 @@ describe('Pagination Component', () => {
   });
 
   it('calls handlePageChange when "Prev" button is clicked', () => {
-    const mockNavigate = jest.fn();
+    const navigateMock = jest.fn();
+    jest
+      .spyOn(require('react-router-dom'), 'useNavigate')
+      .mockReturnValue(navigateMock);
+
     render(
-      <Pagination currentPage={3} totalPages={5} navigate={mockNavigate} />,
+      <Pagination currentPage={3} totalPages={5} navigate={navigateMock} />,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /prev/i }));
 
-    expect(mockNavigate).toHaveBeenCalledWith('?page=2');
+    expect(navigateMock).toHaveBeenCalledWith('?page=2');
   });
 
   it('calls handlePageChange when "Next" button is clicked', () => {
-    const mockNavigate = jest.fn();
+    const navigateMock = jest.fn();
+    jest
+      .spyOn(require('react-router-dom'), 'useNavigate')
+      .mockReturnValue(navigateMock);
+
     render(
-      <Pagination currentPage={3} totalPages={5} navigate={mockNavigate} />,
+      <Pagination currentPage={3} totalPages={5} navigate={navigateMock} />,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /next/i }));
 
-    expect(mockNavigate).toHaveBeenCalledWith('?page=4');
+    expect(navigateMock).toHaveBeenCalledWith('?page=4');
   });
 });
