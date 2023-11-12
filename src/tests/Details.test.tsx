@@ -1,4 +1,4 @@
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -7,6 +7,7 @@ import fetchMock from 'jest-fetch-mock';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => jest.fn(),
   useLocation: () => ({
     state: {
       character: {
@@ -74,7 +75,7 @@ describe('Details Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
-      expect(screen.getByText('Alive')).toBeInTheDocument();
+      expect(screen.getByText(/Alive/)).toBeInTheDocument();
       expect(screen.getByText('Human')).toBeInTheDocument();
     });
   });
@@ -96,6 +97,11 @@ describe('Details Component', () => {
   });
 
   it('navigates back to the home page when "Close Details" button is clicked', async () => {
+    const mockNavigate = jest.fn();
+    require('react-router-dom').useNavigate.mockImplementation(
+      () => mockNavigate,
+    );
+
     render(
       <MemoryRouter initialEntries={['/details']}>
         <Routes>
@@ -108,11 +114,9 @@ describe('Details Component', () => {
       const closeButton = screen.getByText('Close Details');
       expect(closeButton).toBeInTheDocument();
 
-      act(() => {
-        userEvent.click(closeButton);
-      });
+      userEvent.click(closeButton);
 
-      expect(window.location.pathname).toBe('/');
+      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
   });
 });

@@ -22,9 +22,9 @@ const Details = () => {
         const data = await response.json();
         console.log('DETAILS', data);
         setCharacter(data);
+        setLoading(false);
       } catch (error) {
         console.error('Ошибка при выполнении API-запроса: ', error);
-      } finally {
         setLoading(false);
       }
     }
