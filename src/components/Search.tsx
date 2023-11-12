@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { SearchComponentProps } from '../interfaces/interfaces';
 import { fetchCharacters } from '../services/services';
 import ErrorComponent from './ErrorComponent';
+import { useMainContext } from '../context/MainContext';
 
 const Search: React.FC<SearchComponentProps> = (props) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const { searchTerm, setSearchTerm } = useMainContext();
 
   useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';

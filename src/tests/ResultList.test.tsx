@@ -40,6 +40,28 @@ const mockResults: Character[] = [
 ];
 
 describe('ResultList Component', () => {
+  it('handles item click when showDetails is false', () => {
+    const mockOnItemSelect = jest.fn();
+    render(
+      <MainProvider>
+        <ResultList
+          loading={false}
+          results={mockResults}
+          onItemSelect={mockOnItemSelect}
+          showDetails={false}
+          currentPage={1}
+          totalPages={1}
+          navigate={() => {}}
+        />
+      </MainProvider>,
+    );
+
+    const firstListItem = screen.getAllByRole('listitem')[0];
+    fireEvent.click(firstListItem);
+
+    expect(mockOnItemSelect).toHaveBeenCalledWith(mockResults[0]);
+  });
+
   it('рендерит элементы результата при loading=true', () => {
     render(
       <MainProvider>
