@@ -53,4 +53,13 @@ describe('Pagination Component', () => {
 
     expect(handlePageChangeMock).toHaveBeenCalledWith(4);
   });
+
+  it('calls navigate with the correct page when a page button is clicked', () => {
+    const mockNavigate = jest.fn();
+    render(<Pagination currentPage={3} totalPages={5} />);
+
+    fireEvent.click(screen.getByRole('button', { name: '4' }));
+
+    expect(mockNavigate).toHaveBeenCalledWith('?page=4');
+  });
 });

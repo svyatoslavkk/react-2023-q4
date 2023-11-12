@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ResultList from '../components/ResultList';
 import { Character } from '../interfaces/interfaces';
@@ -62,22 +61,22 @@ describe('ResultList Component', () => {
     expect(resultItems).toHaveLength(mockResults.length);
   });
 
-  it('calls onItemSelect when a result item is clicked', () => {
-    const mockOnItemSelect = {};
-    render(
+  it('should call onItemSelect when an item is clicked', () => {
+    const mockOnItemSelect = jest.fn();
+
+    const { getByAltText } = render(
       <ResultList
         loading={false}
         allCharacters={mockResults}
         results={mockResults}
-        onItemSelect={() => {}}
+        onItemSelect={mockOnItemSelect}
         showDetails={false}
         currentPage={1}
         totalPages={1}
       />,
     );
 
-    const resultItems = screen.getAllByRole('listitem');
-    userEvent.click(resultItems[0]);
+    fireEvent.click(getByAltText('Character Image'));
 
     expect(mockOnItemSelect).toHaveBeenCalledWith(mockResults[0]);
   });
