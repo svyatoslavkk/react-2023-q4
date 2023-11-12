@@ -62,7 +62,7 @@ describe('ResultList Component', () => {
     expect(mockOnItemSelect).toHaveBeenCalledWith(mockResults[0]);
   });
 
-  it('рендерит элементы результата при loading=true', () => {
+  it('renders the correct number of elements when loading=true', () => {
     render(
       <MainProvider>
         <ResultList
@@ -84,7 +84,7 @@ describe('ResultList Component', () => {
     expect(resultItems).toHaveLength(0);
   });
 
-  it('рендерит элементы результата при loading=false', () => {
+  it('renders the correct number of elements when loading=false', () => {
     render(
       <MainProvider>
         <ResultList
@@ -106,9 +106,8 @@ describe('ResultList Component', () => {
     expect(resultItems).toHaveLength(mockResults.length);
   });
 
-  it('должен вызывать onItemSelect при клике на элемент', () => {
+  it('should call onItemSelect when an item is clicked', () => {
     const mockOnItemSelect = jest.fn();
-
     render(
       <MainProvider>
         <ResultList
@@ -127,5 +126,30 @@ describe('ResultList Component', () => {
     fireEvent.click(firstListItem);
 
     expect(mockOnItemSelect).toHaveBeenCalledWith(mockResults[0]);
+  });
+
+  it('renders images and text content for each result', () => {
+    render(
+      <MainProvider>
+        <ResultList
+          loading={false}
+          results={mockResults}
+          onItemSelect={() => {}}
+          showDetails={false}
+          currentPage={1}
+          totalPages={1}
+          navigate={() => {}}
+        />
+      </MainProvider>,
+    );
+
+    const imageElements = screen.getAllByRole('img');
+    expect(imageElements).toHaveLength(mockResults.length);
+
+    const nameElements = screen.getAllByTestId('result-list-item-name');
+    expect(nameElements).toHaveLength(mockResults.length);
+
+    const speciesElements = screen.getAllByTestId('result-list-item-species');
+    expect(speciesElements).toHaveLength(mockResults.length);
   });
 });

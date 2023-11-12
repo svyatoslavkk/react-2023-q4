@@ -36,7 +36,6 @@ describe('fetchCharacters', () => {
       `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}&per_page=${perPage}`,
     );
 
-    // Asserting the returned result
     expect(result).toEqual({
       results: [
         {

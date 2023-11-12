@@ -91,7 +91,7 @@ describe('Details Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Ошибка при выполнении API-запроса:'),
+        screen.getByText('Error while executing API request:'),
       ).toBeInTheDocument();
     });
   });

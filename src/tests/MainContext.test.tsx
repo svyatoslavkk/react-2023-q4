@@ -7,7 +7,7 @@ const TestComponent = () => {
 };
 
 describe('MainContext', () => {
-  it('выбрасывает ошибку при использовании за пределами MainProvider', () => {
+  it('throws an error when used outside of MainProvider', () => {
     expect(() => render(<TestComponent />)).toThrowError(
       'useMainContext must be used within a MainProvider',
     );
