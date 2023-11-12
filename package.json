@@ -10,7 +10,8 @@
     "format:fix": "prettier --write \"src/**/*.{ts,tsx}\"",
     "preview": "vite preview",
     "precommit": "npm run lint",
-    "test": "jest"
+    "test": "jest --coverage",
+    "test:prepush": "jest"
   },
   "dependencies": {
     "node-fetch": "^3.3.2",
@@ -50,7 +51,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm test"
+      "pre-push": "npm run test:prepush"
     }
   },
   "lint-staged": {
