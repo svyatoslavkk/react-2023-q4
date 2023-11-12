@@ -17,8 +17,7 @@ const MainPage: React.FC<Record<string, never>> = () => {
 
   const [showDetails, setShowDetails] = useState(false);
 
-  const { searchTerm, setSearchTerm, allCharacters, setAllCharacters } =
-    useMainContext();
+  const { searchTerm, setSearchTerm, setAllCharacters } = useMainContext();
 
   const searchParams = new URLSearchParams(location.search);
   const page = parseInt(searchParams.get('page') || '1', 10);
@@ -108,7 +107,6 @@ const MainPage: React.FC<Record<string, never>> = () => {
             results={searchResults}
             currentPage={currentPage}
             totalPages={totalPages}
-            allCharacters={allCharacters}
             onItemSelect={handleItemClick}
             showDetails={showDetails}
             navigate={() => {}}

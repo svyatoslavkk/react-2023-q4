@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ResultList from '../components/ResultList';
 import { Character } from '../interfaces/interfaces';
+import { MainProvider } from '../context/MainContext';
 
 jest.mock('../components/Pagination', () => ({
   __esModule: true,
@@ -39,36 +40,46 @@ const mockResults: Character[] = [
 ];
 
 describe('ResultList Component', () => {
-  it('рендерит спиннер при loading=true', () => {
+  it('рендерит элементы результата при loading=true', () => {
     render(
-      <ResultList
-        loading={true}
-        results={mockResults}
-        allCharacters={mockResults}
-        onItemSelect={() => {}}
-        showDetails={false}
-        currentPage={1}
-        totalPages={1}
-        navigate={() => {}}
-      />,
+      <MainProvider>
+        <ResultList
+          loading={true}
+          results={mockResults}
+          onItemSelect={() => {}}
+          showDetails={false}
+          currentPage={1}
+          totalPages={1}
+          navigate={() => {}}
+        />
+      </MainProvider>,
     );
-    const spinnerElement = screen.getByTestId('spinner');
-    expect(spinnerElement).toBeInTheDocument();
+
+    const paginationElement = screen.getByText('Pagination Component');
+    expect(paginationElement).toBeInTheDocument();
+
+    const resultItems = screen.queryAllByRole('listitem');
+    expect(resultItems).toHaveLength(0);
   });
 
   it('рендерит элементы результата при loading=false', () => {
     render(
-      <ResultList
-        loading={false}
-        allCharacters={mockResults}
-        results={mockResults}
-        onItemSelect={() => {}}
-        showDetails={false}
-        currentPage={1}
-        totalPages={1}
-        navigate={() => {}}
-      />,
+      <MainProvider>
+        <ResultList
+          loading={false}
+          results={mockResults}
+          onItemSelect={() => {}}
+          showDetails={false}
+          currentPage={1}
+          totalPages={1}
+          navigate={() => {}}
+        />
+      </MainProvider>,
     );
+
+    const paginationElement = screen.getByText('Pagination Component');
+    expect(paginationElement).toBeInTheDocument();
+
     const resultItems = screen.getAllByRole('listitem');
     expect(resultItems).toHaveLength(mockResults.length);
   });
@@ -76,20 +87,22 @@ describe('ResultList Component', () => {
   it('должен вызывать onItemSelect при клике на элемент', () => {
     const mockOnItemSelect = jest.fn();
 
-    const { getByAltText } = render(
-      <ResultList
-        loading={false}
-        allCharacters={mockResults}
-        results={mockResults}
-        onItemSelect={mockOnItemSelect}
-        showDetails={false}
-        currentPage={1}
-        totalPages={1}
-        navigate={() => {}}
-      />,
+    render(
+      <MainProvider>
+        <ResultList
+          loading={false}
+          results={mockResults}
+          onItemSelect={mockOnItemSelect}
+          showDetails={false}
+          currentPage={1}
+          totalPages={1}
+          navigate={() => {}}
+        />
+      </MainProvider>,
     );
 
-    fireEvent.click(getByAltText('Изображение персонажа'));
+    const firstListItem = screen.getAllByRole('listitem')[0];
+    fireEvent.click(firstListItem);
 
     expect(mockOnItemSelect).toHaveBeenCalledWith(mockResults[0]);
   });

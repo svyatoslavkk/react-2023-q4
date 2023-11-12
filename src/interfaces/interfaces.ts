@@ -44,7 +44,6 @@ export interface SearchComponentState {
 export interface ResultListProps extends PaginationProps {
   results: Character[];
   loading: boolean;
-  allCharacters: Character[];
   onItemSelect: (character: Character) => void;
   showDetails: boolean;
 }
