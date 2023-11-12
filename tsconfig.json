@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["jest"],
+    "types": ["jest", "node", "jest-fetch-mock"],
 
     /* Linting */
     "strict": true,

@@ -1,69 +1,103 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import fetchMock from 'jest-fetch-mock';
 import Details from '../components/Details';
 
+fetchMock.enableMocks();
+
 describe('Details Component', () => {
-  it('renders character details after loading', async () => {
-    const mockResponse = {
+  it('displays loading spinner while fetching data', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify({}), { status: 200 });
+
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/character/1']}>
+          <Routes>
+            <Route path="/character/:id" element={<Details />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+    });
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  it('displays character details when data is loaded successfully', async () => {
+    const mockCharacter = {
       id: 1,
-      name: 'Rick',
-      image: 'rick.jpg',
+      name: 'Rick Sanchez',
+      image: 'https://example.com/rick.png',
       gender: 'Male',
       location: { name: 'Earth' },
       status: 'Alive',
       species: 'Human',
     };
+    fetchMock.mockResponseOnce(JSON.stringify(mockCharacter), { status: 200 });
 
-    jest.spyOn(window, 'fetch').mockResolvedValueOnce(
-      new Response(JSON.stringify(mockResponse), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      } as ResponseInit),
-    );
-
-    render(<Details />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Rick')).toBeInTheDocument();
-      expect(screen.getByAltText('Character Image')).toHaveAttribute(
-        'src',
-        'rick.jpg',
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/character/1']}>
+          <Routes>
+            <Route path="/character/:id" element={<Details />} />
+          </Routes>
+        </MemoryRouter>,
       );
-      expect(screen.getByText('Gender: Male')).toBeInTheDocument();
-      expect(screen.getByText('Location: Earth')).toBeInTheDocument();
-      expect(screen.getByText('Status: Alive')).toBeInTheDocument();
-      expect(screen.getByText('Species: Human')).toBeInTheDocument();
     });
+
+    expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
+    expect(screen.getByAltText('Character Image')).toHaveAttribute(
+      'src',
+      'https://example.com/rick.png',
+    );
+    expect(screen.getByText('Gender: Male')).toBeInTheDocument();
+    expect(screen.getByText('Location: Earth')).toBeInTheDocument();
+    expect(screen.getByText('Status: Alive')).toBeInTheDocument();
+    expect(screen.getByText('Species: Human')).toBeInTheDocument();
   });
-});
 
-describe('Details Component', () => {
-  it('handles errors during data fetching', async () => {
-    jest
-      .spyOn(window, 'fetch')
-      .mockRejectedValueOnce(new Error('API request failed'));
+  it('handles API request failure gracefully', async () => {
+    fetchMock.mockReject(new Error('Failed to fetch'));
 
-    render(<Details />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Ошибка при выполнении API-запроса: '),
-      ).toBeInTheDocument();
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/character/1']}>
+          <Routes>
+            <Route path="/character/:id" element={<Details />} />
+          </Routes>
+        </MemoryRouter>,
+      );
     });
-  });
-});
 
-describe('Details Component', () => {
-  it('closes Details component on button click', () => {
+    expect(
+      screen.getByText('Ошибка при выполнении API-запроса:'),
+    ).toBeInTheDocument();
+  });
+
+  it('navigates back to the home page when "Close Details" button is clicked', async () => {
     const mockNavigate = jest.fn();
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useNavigate: () => mockNavigate,
-    }));
+    jest
+      .spyOn(require('react-router-dom'), 'useNavigate')
+      .mockReturnValue(mockNavigate);
 
-    render(<Details />);
+    fetchMock.mockResponseOnce(JSON.stringify({}), { status: 200 });
 
-    fireEvent.click(screen.getByText('Close Details'));
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/character/1']}>
+          <Routes>
+            <Route path="/character/:id" element={<Details />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+    });
+
+    const closeButton = screen.getByText('Close Details');
+    expect(closeButton).toBeInTheDocument();
+
+    act(() => {
+      closeButton.click();
+    });
 
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });

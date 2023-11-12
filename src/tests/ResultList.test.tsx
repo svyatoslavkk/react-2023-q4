@@ -3,6 +3,16 @@ import '@testing-library/jest-dom';
 import ResultList from '../components/ResultList';
 import { Character } from '../interfaces/interfaces';
 
+jest.mock('../components/Pagination', () => ({
+  __esModule: true,
+  default: () => <div>Pagination Component</div>,
+}));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => jest.fn(),
+}));
+
 const mockResults: Character[] = [
   {
     id: 1,
@@ -29,7 +39,7 @@ const mockResults: Character[] = [
 ];
 
 describe('ResultList Component', () => {
-  it('renders loading spinner when loading is true', () => {
+  it('рендерит спиннер при loading=true', () => {
     render(
       <ResultList
         loading={true}
@@ -46,7 +56,7 @@ describe('ResultList Component', () => {
     expect(spinnerElement).toBeInTheDocument();
   });
 
-  it('renders result items when loading is false', () => {
+  it('рендерит элементы результата при loading=false', () => {
     render(
       <ResultList
         loading={false}
@@ -63,7 +73,7 @@ describe('ResultList Component', () => {
     expect(resultItems).toHaveLength(mockResults.length);
   });
 
-  it('should call onItemSelect when an item is clicked', () => {
+  it('должен вызывать onItemSelect при клике на элемент', () => {
     const mockOnItemSelect = jest.fn();
 
     const { getByAltText } = render(
@@ -79,7 +89,7 @@ describe('ResultList Component', () => {
       />,
     );
 
-    fireEvent.click(getByAltText('Character Image'));
+    fireEvent.click(getByAltText('Изображение персонажа'));
 
     expect(mockOnItemSelect).toHaveBeenCalledWith(mockResults[0]);
   });
