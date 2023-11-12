@@ -85,7 +85,7 @@ const MainPage: React.FC<Record<string, never>> = () => {
       setLoading(false);
       localStorage.setItem('searchTerm', searchTerm);
     } catch (error) {
-      console.error('Error in the loadData: ', error);
+      console.error('Error in loadData: ', error);
       setLoading(false);
       throw error;
     }
