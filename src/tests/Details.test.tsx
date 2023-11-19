@@ -1,122 +1,81 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
 import '@testing-library/jest-dom';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+import {
+  createMemoryRouter,
+  RouterProvider,
+  MemoryRouter,
+  createRoutesFromElements,
+  Route,
+} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import MainPage from '../components/MainPage';
 import Details from '../components/Details';
-import fetchMock from 'jest-fetch-mock';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
-  useLocation: () => ({
-    state: {
-      character: {
-        id: 1,
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        type: '',
-        gender: 'Male',
-        origin: {
-          name: 'Earth (C-137)',
-          url: 'https://rickandmortyapi.com/api/location/1',
-        },
-        location: {
-          name: 'Citadel of Ricks',
-          url: 'https://rickandmortyapi.com/api/location/3',
-        },
-        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-        episode: [
-          'https://rickandmortyapi.com/api/episode/1',
-          'https://rickandmortyapi.com/api/episode/2',
-        ],
-        url: 'https://rickandmortyapi.com/api/character/1',
-        created: '2017-11-04T18:48:46.250Z',
-      },
-    },
-  }),
-}));
+describe('Tests for the Detailed Card component', () => {
+  const routes = createRoutesFromElements(
+    <Route
+      path="/"
+      element={
+        <Provider store={store}>
+          <MainPage />
+        </Provider>
+      }
+    >
+      <Route
+        index
+        element={
+          <Provider store={store}>
+            <Details />
+          </Provider>
+        }
+      />
+    </Route>,
+  );
 
-fetchMock.enableMocks();
-
-describe('Details Component', () => {
-  it('displays loading spinner while fetching data', async () => {
-    render(
-      <MemoryRouter>
-        <Details />
-      </MemoryRouter>,
+  it('Loading indicator is displayed while fetching data', async () => {
+    const router = createMemoryRouter(routes);
+    render(<RouterProvider router={router} />);
+    const card = (await screen.findAllByTestId('card'))[0];
+    expect(screen.queryByTestId('details')).not.toBeInTheDocument();
+    fireEvent.click(card);
+    const details = screen.getByTestId('details');
+    expect(details).toMatchSnapshot();
+    expect(details).toContainHTML(
+      '<span class="loader" data-testid="loader" />',
     );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    });
   });
 
-  it('displays character details when data is loaded successfully', async () => {
-    fetchMock.mockResponseOnce(
-      JSON.stringify({
-        id: 1,
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        gender: 'Male',
-        location: {
-          name: 'Citadel of Ricks',
-        },
-        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-      }),
+  it('Detailed card component correctly displays the detailed card data;', async () => {
+    const router = createMemoryRouter(routes);
+    render(<RouterProvider router={router} />);
+    const card = (await screen.findAllByTestId('card'))[0];
+    expect(screen.queryByTestId('details')).not.toBeInTheDocument();
+    fireEvent.click(card);
+    expect(screen.getByTestId('details')).toMatchSnapshot();
+    expect(await screen.findByTestId('details-h1')).toHaveTextContent(
+      'details',
     );
-
-    render(
-      <MemoryRouter>
-        <Details />
-      </MemoryRouter>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
-      expect(screen.getByText(/Alive/)).toBeInTheDocument();
-      expect(screen.getByText('Human')).toBeInTheDocument();
-    });
+    expect(screen.getByText('EarthAnimal: No')).toBeInTheDocument();
+    expect(screen.getByText('Avian: Yes')).toBeInTheDocument();
   });
 
-  it('handles API request failure gracefully', async () => {
-    fetchMock.mockReject(new Error('Fake API error'));
-
+  it('Clicking the close button hides the component.', async () => {
     render(
-      <MemoryRouter>
-        <Details />
+      <MemoryRouter initialEntries={['/?details=Cat']}>
+        <Provider store={store}>
+          <Details />
+        </Provider>
       </MemoryRouter>,
     );
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Error while executing API request:'),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it('navigates back to the home page when "Close Details" button is clicked', async () => {
-    const mockNavigate = jest.fn();
-    require('react-router-dom').useNavigate.mockImplementation(
-      () => mockNavigate,
-    );
-
-    render(
-      <MemoryRouter initialEntries={['/details']}>
-        <Routes>
-          <Route path="/details" element={<Details />} />
-        </Routes>
-      </MemoryRouter>,
-    );
-
-    await waitFor(() => {
-      const closeButton = screen.getByText('Close Details');
-      expect(closeButton).toBeInTheDocument();
-
-      userEvent.click(closeButton);
-
-      expect(mockNavigate).toHaveBeenCalledWith('/');
-    });
+    expect(await screen.findByTestId('details')).toBeInTheDocument();
+    expect(screen.getByTestId('details')).toMatchSnapshot();
+    fireEvent.click(screen.getByTestId('cross'));
+    expect(screen.queryByTestId('details')).toMatchSnapshot();
+    expect(screen.queryByTestId('details')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('details-h1')).not.toBeInTheDocument();
+    expect(screen.queryByText('EarthAnimal: No')).not.toBeInTheDocument();
+    expect(screen.queryByText('Avian: Yes')).not.toBeInTheDocument();
   });
 });

@@ -1,23 +1,19 @@
 import { ReactNode } from 'react';
+import { SetURLSearchParams } from 'react-router-dom';
 
 export interface Character {
   id: number;
   name: string;
-  gender: string;
-  location: {
-    name: string;
-  };
-  title: string;
-  text: string;
-  status: string;
-  species: string;
-  image: string;
+  avian: boolean;
+  canine: boolean;
+  earthAnimal: boolean;
+  earthInsect: boolean;
+  feline: boolean;
 }
 
 export interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  navigate: (path: string) => void;
+  params: URLSearchParams;
+  setParams: SetURLSearchParams;
 }
 
 export interface DetailsProps {
@@ -25,14 +21,9 @@ export interface DetailsProps {
   onCloseDetails: () => void;
 }
 
-export interface SearchComponentProps extends PaginationProps {
-  updateResults: (
-    results: Character[],
-    currentPage: number,
-    totalPages: number,
-  ) => void;
-  onSearchInputChange: (searchTerm: string) => void;
-  navigate: (path: string) => void;
+export interface SearchComponentProps {
+  params: URLSearchParams;
+  setParams: SetURLSearchParams;
 }
 
 export interface SearchComponentState {
@@ -41,11 +32,10 @@ export interface SearchComponentState {
   error: Error | null;
 }
 
-export interface ResultListProps extends PaginationProps {
-  results: Character[];
-  loading: boolean;
-  onItemSelect: (character: Character) => void;
-  showDetails: boolean;
+export interface ResultListProps {
+  params: URLSearchParams;
+  setParams: SetURLSearchParams;
+  searchResults: readonly Character[];
 }
 
 export interface AppState {

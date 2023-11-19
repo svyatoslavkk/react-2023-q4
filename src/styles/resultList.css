@@ -17,10 +17,10 @@
     cursor: pointer;
     transition: 0.2s ease;
     display: flex;
-    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
     padding: 1rem;
     width: 100%;
-    min-width: 125px;
 }
 
 .result-list-item:hover {
@@ -28,8 +28,9 @@
 }
 
 .result-list-item-image {
-    border-radius: 1rem;
-    height: 200px;
+    border-radius: 5rem;
+    height: 50px;
+    width: 50px;
 }
 
 .result-list-item-text-content {
