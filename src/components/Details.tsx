@@ -1,66 +1,110 @@
-import { Character } from '../interfaces/interfaces';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
 import Spinner from './Spinner';
+import { useSearchByValueMutation } from '../redux/reducers/api';
+import { setLoadingStatus } from '../redux/reducers/loaderSlice';
+import { setDetailsData, setDetailsName } from '../redux/reducers/detailsSlice';
+import { updateQueryParams } from '../functions/updateQueryParams';
 
-const Details = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [loading, setLoading] = useState(false);
+function Details() {
+  const [params, setParams] = useSearchParams();
+  const { detailsName, detailsData } = useSelector(
+    (state: RootState) => state.details,
+  );
 
-  useEffect(() => {
-    async function fetchCharacterDetails() {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `https://rickandmortyapi.com/api/character/${id}`,
-        );
-        if (!response.ok) {
-          throw new Error('API request failed');
-        }
-        const data = await response.json();
-        console.log('DETAILS', data);
-        setCharacter(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Ошибка при выполнении API-запроса: ', error);
-        setLoading(false);
-      }
-    }
+  const detailsLoader = useSelector(
+    (state: RootState) => state.loader.detailsLoader,
+  );
 
-    fetchCharacterDetails();
-  }, [id]);
+  const dispatch = useDispatch();
 
-  const handleCloseDetails = () => {
-    navigate('/');
+  const [getDetails, { data, isLoading, isSuccess }] =
+    useSearchByValueMutation();
+
+  const handleDetailsClose = () => {
+    dispatch(setDetailsName(''));
+    setParams(updateQueryParams(params, 'details', ''));
   };
 
-  if (loading) {
-    return (
-      <div className="details">
-        <Spinner />
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (detailsName && isLoading) {
+      dispatch(setLoadingStatus({ loader: 'details', value: true }));
+    }
+    if (detailsName && isSuccess) {
+      dispatch(setDetailsData(data?.animals[0]));
+      dispatch(setLoadingStatus({ loader: 'details', value: false }));
+    }
+  }, [isLoading, isSuccess, detailsName, dispatch, data?.animals]);
 
-  if (character) {
-    return (
-      <div className="details">
-        <h2>{character.name}</h2>
-        <img
-          className="result-list-item-image"
-          src={character.image}
-          alt="Character Image"
-        />
-        <p>Gender: {character.gender}</p>
-        <p>Location: {character.location.name}</p>
-        <p>Status: {character.status}</p>
-        <p>Species: {character.species}</p>
-        <button onClick={handleCloseDetails}>Close Details</button>
-      </div>
-    );
-  }
-};
+  useEffect(() => {
+    async function getData() {
+      await getDetails({
+        pageNumber: 0,
+        pageSize: 1000,
+        searchValue: detailsName,
+      });
+    }
+    if (detailsName) getData();
+  }, [detailsName, getDetails]);
+
+  return params.has('details') ? (
+    <div className="details">
+      <button onClick={handleDetailsClose}>Close Details</button>
+      {detailsLoader ? (
+        <Spinner />
+      ) : (
+        <div>
+          <h2 className="details-name">{detailsData.name}</h2>
+          <div className="rest-data">
+            <p>
+              Avian:{' '}
+              {detailsData.avian ? (
+                <span className="yes">Yes</span>
+              ) : (
+                <span className="no">No</span>
+              )}
+            </p>
+            <p>
+              Canine:{' '}
+              {detailsData.canine ? (
+                <span className="yes">Yes</span>
+              ) : (
+                <span className="no">No</span>
+              )}
+            </p>
+            <p>
+              Earth Animal:{' '}
+              {detailsData.earthAnimal ? (
+                <span className="yes">Yes</span>
+              ) : (
+                <span className="no">No</span>
+              )}
+            </p>
+            <p>
+              Earth Insect:{' '}
+              {detailsData.earthInsect ? (
+                <span className="yes">Yes</span>
+              ) : (
+                <span className="no">No</span>
+              )}
+            </p>
+            <p>
+              Feline:{' '}
+              {detailsData.feline ? (
+                <span className="yes">Yes</span>
+              ) : (
+                <span className="no">No</span>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  ) : (
+    <></>
+  );
+}
 
 export default Details;

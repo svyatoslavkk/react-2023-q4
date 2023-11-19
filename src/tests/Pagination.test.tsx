@@ -1,92 +1,44 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
 import '@testing-library/jest-dom';
-import Pagination from '../components/Pagination';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import MainPage from '../components/MainPage';
+import {
+  createMemoryRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+} from 'react-router-dom';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
-}));
-
-describe('Pagination Component', () => {
-  it('renders correctly', () => {
-    render(<Pagination currentPage={1} totalPages={5} navigate={() => {}} />, {
-      wrapper: MemoryRouter,
-    });
-    const paginationElement = screen.getByRole('list', { name: /pagination/i });
-    expect(paginationElement).toBeInTheDocument();
-  });
-
-  it('disables "Prev" button on the first page', () => {
-    render(<Pagination currentPage={1} totalPages={5} navigate={() => {}} />, {
-      wrapper: MemoryRouter,
-    });
-    const prevButton = screen.getByRole('button', { name: /prev/i });
-    expect(prevButton).toBeDisabled();
-  });
-
-  it('disables "Next" button on the last page', () => {
-    render(<Pagination currentPage={5} totalPages={5} navigate={() => {}} />, {
-      wrapper: MemoryRouter,
-    });
-    const nextButton = screen.getByRole('button', { name: /next/i });
-    expect(nextButton).toBeDisabled();
-  });
-
-  it('enables "Prev" button on pages other than the first', () => {
-    render(<Pagination currentPage={3} totalPages={5} navigate={() => {}} />, {
-      wrapper: MemoryRouter,
-    });
-    const prevButton = screen.getByRole('button', { name: /prev/i });
-    expect(prevButton).not.toBeDisabled();
-  });
-
-  it('enables "Next" button on pages other than the last', () => {
-    render(<Pagination currentPage={3} totalPages={5} navigate={() => {}} />, {
-      wrapper: MemoryRouter,
-    });
-    const nextButton = screen.getByRole('button', { name: /next/i });
-    expect(nextButton).not.toBeDisabled();
-  });
-
-  it('calls handlePageChange when a page button is clicked', () => {
-    const mockNavigate = jest.fn();
-    render(
-      <Pagination currentPage={3} totalPages={5} navigate={mockNavigate} />,
+describe('Tests for the Pagination component', () => {
+  it('The component updates URL query parameter when page changes', async () => {
+    const routes = createRoutesFromElements(
+      <Route
+        path="/"
+        element={
+          <Provider store={store}>
+            <MainPage />
+          </Provider>
+        }
+      ></Route>,
     );
-
-    fireEvent.click(screen.getByRole('button', { name: '4' }));
-
-    expect(mockNavigate).toHaveBeenCalledWith('?page=4');
-  });
-
-  it('calls handlePageChange when "Prev" button is clicked', () => {
-    const navigateMock = jest.fn();
-    jest
-      .spyOn(require('react-router-dom'), 'useNavigate')
-      .mockReturnValue(navigateMock);
-
-    render(
-      <Pagination currentPage={3} totalPages={5} navigate={navigateMock} />,
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: /prev/i }));
-
-    expect(navigateMock).toHaveBeenCalledWith('?page=2');
-  });
-
-  it('calls handlePageChange when "Next" button is clicked', () => {
-    const navigateMock = jest.fn();
-    jest
-      .spyOn(require('react-router-dom'), 'useNavigate')
-      .mockReturnValue(navigateMock);
-
-    render(
-      <Pagination currentPage={3} totalPages={5} navigate={navigateMock} />,
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
-
-    expect(navigateMock).toHaveBeenCalledWith('?page=4');
+    const router = createMemoryRouter(routes);
+    render(<RouterProvider router={router} />);
+    expect(router.state.location.search).toBe('');
+    expect(await screen.findByTestId('pagination')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('3'));
+    expect(screen.getByTestId('pagination')).toMatchSnapshot();
+    expect(router.state.location.search).toBe('?page=3');
+    fireEvent.click(await screen.findByText('>'));
+    expect(router.state.location.search).toBe('?page=4');
+    fireEvent.click(await screen.findByText('...'));
+    expect(router.state.location.search).toBe('?page=7');
+    expect(await screen.findByTestId('pagination')).toBeInTheDocument();
+    expect(screen.getByTestId('page-1-button')).toHaveTextContent('5');
+    expect(screen.getByTestId('page-2-button')).toHaveTextContent('6');
+    expect(screen.getByTestId('page-3-button')).toHaveTextContent('7');
+    fireEvent.click(await screen.findByTestId('last-page-button'));
+    expect(router.state.location.search).toBe('?page=20');
   });
 });

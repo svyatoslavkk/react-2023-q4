@@ -1,54 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { setSearchValue } from '../redux/reducers/searchSlice';
+import {
+  setPageNumber,
+  setPaginationButtonsValue,
+} from '../redux/reducers/paginationSlice';
+import { updateQueryParams } from '../functions/updateQueryParams';
 import { SearchComponentProps } from '../interfaces/interfaces';
-import { fetchCharacters } from '../services/services';
-import ErrorComponent from './ErrorComponent';
-import { useMainContext } from '../context/MainContext';
 
-const Search: React.FC<SearchComponentProps> = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const { searchTerm, setSearchTerm } = useMainContext();
+function Search(props: SearchComponentProps) {
+  const searchValue = useSelector(
+    (state: RootState) => state.search.searchValue,
+  );
+  const pageNumber = useSelector(
+    (state: RootState) => state.pagination.pageNumber,
+  );
+  const dispatch = useDispatch();
+  const inputCurrentValue = useRef(searchValue);
 
-  useEffect(() => {
-    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    setSearchTerm(savedSearchTerm);
-  }, []);
+  const { params, setParams } = props;
 
-  const handleSearch = async () => {
-    try {
-      setLoading(true);
-
-      const { results, pages } = await fetchCharacters(searchTerm, 1, 10);
-
-      props.updateResults(results, props.currentPage, pages);
-      setLoading(false);
-      localStorage.setItem('searchTerm', searchTerm);
-    } catch (error) {
-      console.error('Error when making an API request: ', error);
-      setLoading(false);
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    inputCurrentValue.current = e.target.value;
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    dispatch(setSearchValue(inputCurrentValue.current));
+    dispatch(setPaginationButtonsValue([1, 2, 3]));
+    setParams(updateQueryParams(params, 'search', ''));
+    if (pageNumber) dispatch(setPageNumber(0));
   };
-
-  const handleThrowError = () => {
-    throwError();
-  };
-
-  const throwError = () => {
-    console.error('Simulated error:', new Error('Simulated error'));
-    setError(new Error('Simulated error'));
-  };
-
-  const handleResetError = () => {
-    setError(null);
-  };
-
-  if (error) {
-    return <ErrorComponent onReload={handleResetError} />;
-  }
 
   return (
     <div className="search-component">
@@ -57,24 +40,16 @@ const Search: React.FC<SearchComponentProps> = (props) => {
           type="text"
           className="form-field"
           placeholder="Enter character name"
-          value={searchTerm}
           onChange={handleInputChange}
         />
         <div className="button-container">
-          <button
-            className="search-button"
-            onClick={handleSearch}
-            disabled={loading}
-          >
+          <button className="search-button" onClick={handleSearchClick}>
             Search
-          </button>
-          <button className="error-button" onClick={handleThrowError}>
-            Throw an Error
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Search;

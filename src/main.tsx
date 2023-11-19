@@ -1,25 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store, persistor } from './redux/store.ts';
+import { PersistGate } from 'redux-persist/lib/integration/react';
 import App from './App.tsx';
-import Details from './components/Details.tsx';
 import './index.css';
-
-const router = createBrowserRouter([
-  {
-    path: `/`,
-    element: <App />,
-    children: [
-      {
-        path: '/character/:id',
-        element: <Details />,
-      },
-    ],
-  },
-]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ReduxProvider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
+    </ReduxProvider>
   </React.StrictMode>,
 );

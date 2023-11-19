@@ -1,4 +1,28 @@
 .details {
-  flex: 1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 110;
+}
+
+.details-name {
+  text-transform: uppercase;
+  font-size: 28px;
+}
+
+.rest-data {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.yes {
+  color: rgb(101, 255, 98);
+}
+
+.no {
+  color: rgb(255, 93, 93);
 }

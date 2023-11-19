@@ -1,39 +1,57 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import {
+  clickNextPrevButton,
+  setPageNumber,
+} from '../redux/reducers/paginationSlice';
+import { updateQueryParams } from '../functions/updateQueryParams';
 import { PaginationProps } from '../interfaces/interfaces';
-import { useNavigate } from 'react-router-dom';
 
-export default function Pagination({
-  currentPage,
-  totalPages,
-}: PaginationProps) {
-  const navigate = useNavigate();
+function Pagination(props: PaginationProps) {
+  const { pageNumber, totalPages, paginationButtonsValue } = useSelector(
+    (state: RootState) => state.pagination,
+  );
 
-  const handlePageChange = (newPage: number) => {
-    navigate(`?page=${newPage}`);
+  const dispatch = useDispatch();
+
+  const { params, setParams } = props;
+
+  const handlePrevClick = () => {
+    dispatch(clickNextPrevButton('prev'));
+    setParams(updateQueryParams(params, 'page', pageNumber.toString()));
   };
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const handlePageButtonClick = (value: number) => {
+    dispatch(setPageNumber(value - 1));
+    setParams(updateQueryParams(params, 'page', value.toString()));
+  };
+
+  const handleNextClick = () => {
+    dispatch(clickNextPrevButton('next'));
+    setParams(updateQueryParams(params, 'page', (pageNumber + 2).toString()));
+  };
 
   return (
     <ul className="pagination">
-      {currentPage > 1 && (
-        <li className="prev">
-          <button onClick={() => handlePageChange(currentPage - 1)}>
-            Prev
-          </button>
-        </li>
-      )}
-      {pages.map((page) => (
-        <li key={page} className={page === currentPage ? 'active' : ''}>
-          <button onClick={() => handlePageChange(page)}>{page}</button>
-        </li>
+      <li className="prev">
+        {pageNumber > 0 && <button onClick={handlePrevClick}>Prev</button>}
+      </li>
+      {paginationButtonsValue.map((value) => (
+        <button
+          key={value}
+          style={{ backgroundColor: pageNumber + 1 === value ? 'orange' : '' }}
+          onClick={() => handlePageButtonClick(value)}
+        >
+          {value}
+        </button>
       ))}
-      {currentPage < totalPages && (
-        <li className="next">
-          <button onClick={() => handlePageChange(currentPage + 1)}>
-            Next
-          </button>
-        </li>
-      )}
+      <li className="next">
+        {pageNumber + 1 < totalPages && (
+          <button onClick={handleNextClick}>Next</button>
+        )}
+      </li>
     </ul>
   );
 }
+
+export default Pagination;

@@ -1,127 +1,55 @@
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 import Search from '../components/Search';
-import { fetchCharacters } from '../services/services';
-import { MainProvider } from '../context/MainContext';
 
-jest.mock('../services/services');
-
-describe('Search component', () => {
-  it('should handle search and update results', async () => {
-    const mockUpdateResults = jest.fn();
-    const mockOnSearchInputChange = jest.fn();
-    const mockNavigate = jest.fn();
-
+describe('Tests for the Search component', () => {
+  it('Clicking the Search button saves the entered value to the local storage', async () => {
     render(
-      <MainProvider>
-        <Search
-          currentPage={1}
-          totalPages={1}
-          updateResults={mockUpdateResults}
-          onSearchInputChange={mockOnSearchInputChange}
-          navigate={mockNavigate}
-        />
-      </MainProvider>,
+      <Provider store={store}>
+        <Search params={new URLSearchParams()} setParams={vi.fn()} />
+      </Provider>,
     );
-
-    fireEvent.change(screen.getByPlaceholderText('Enter character name'), {
-      target: { value: 'Rick' },
+    expect(localStorage.getItem('persist:root')).toBe(
+      '{"search":"{\\"searchValue\\":\\"\\"}","_persist":"{\\"version\\":-1,\\"rehydrated\\":true}"}',
+    );
+    fireEvent.change(screen.getByTestId('search-input'), {
+      target: { value: 'hotdog' },
     });
-
-    fireEvent.click(screen.getByText('Search'));
-
+    fireEvent.submit(screen.getByTestId('search-form'));
     await waitFor(() => {
-      expect(fetchCharacters).toHaveBeenCalledWith('Rick', 1, 10);
-      expect(mockUpdateResults).toHaveBeenCalledWith(expect.any(Array), 1, 1);
+      expect(localStorage.getItem('persist:root')).toBe(
+        `{"search":"{\\"searchValue\\":\\"hotdog\\"}","_persist":"{\\"version\\":-1,\\"rehydrated\\":true}"}`,
+      );
     });
-  });
 
-  it('should handle error when making an API request', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-    const mockOnSearchInputChange = jest.fn();
-    const mockNavigate = jest.fn();
-
-    render(
-      <MainProvider>
-        <Search
-          currentPage={1}
-          totalPages={1}
-          updateResults={() => {}}
-          onSearchInputChange={mockOnSearchInputChange}
-          navigate={mockNavigate}
-        />
-      </MainProvider>,
-    );
-
-    const errorButton = screen.getByText('Throw an Error');
-
-    fireEvent.click(errorButton);
-
-    expect(console.error).toHaveBeenCalledWith(
-      'Simulated error:',
-      expect.any(Error),
-    );
-
-    const errorMessage = await screen.findByText('Simulated error');
-    expect(errorMessage).toBeInTheDocument();
-  });
-
-  it('should handle reset error', async () => {
-    const mockResetError = jest.fn();
-    const mockOnSearchInputChange = jest.fn();
-    const mockNavigate = jest.fn();
-
-    render(
-      <MainProvider>
-        <Search
-          currentPage={1}
-          totalPages={1}
-          updateResults={() => {}}
-          onSearchInputChange={mockOnSearchInputChange}
-          navigate={mockNavigate}
-        />
-      </MainProvider>,
-    );
-
-    fireEvent.click(screen.getByText('Throw an Error'));
-
-    fireEvent.click(screen.getByText('Reload'));
-
-    expect(mockResetError).toHaveBeenCalled();
-
-    const errorMessage = screen.queryByText('Simulated error');
-    expect(errorMessage).toBeNull();
-  });
-
-  it('should disable Search button during loading', async () => {
-    const mockOnSearchInputChange = jest.fn();
-    const mockNavigate = jest.fn();
-
-    render(
-      <MainProvider>
-        <Search
-          currentPage={1}
-          totalPages={1}
-          updateResults={() => {}}
-          onSearchInputChange={mockOnSearchInputChange}
-          navigate={mockNavigate}
-        />
-      </MainProvider>,
-    );
-
-    const input = screen.getByPlaceholderText(
-      'Enter character name',
-    ) as HTMLInputElement;
-    const searchButton = screen.getByText('Search');
-
-    fireEvent.change(input, { target: { value: 'Rick' } });
-    fireEvent.click(searchButton);
-
+    fireEvent.change(screen.getByTestId('search-input'), {
+      target: { value: 'cat' },
+    });
+    fireEvent.submit(screen.getByTestId('search-form'));
+    expect(screen.getByTestId('search-form')).toMatchSnapshot();
     await waitFor(() => {
-      expect(searchButton).toBeDisabled();
+      expect(localStorage.getItem('persist:root')).toBe(
+        `{"search":"{\\"searchValue\\":\\"cat\\"}","_persist":"{\\"version\\":-1,\\"rehydrated\\":true}"}`,
+      );
     });
+  });
 
-    const loadingMessage = await screen.findByText('Loading...');
-    expect(loadingMessage).toBeInTheDocument();
+  it('The component retrieves the value from the local storage upon mounting.', async () => {
+    const localStorageValue = localStorage.getItem('persist:root');
+
+    const inputValue = localStorageValue
+      ? JSON.parse(JSON.parse(localStorageValue).search).searchValue
+      : '';
+    expect(inputValue).toBe('cat');
+    render(
+      <Provider store={store}>
+        <Search params={new URLSearchParams()} setParams={vi.fn()} />
+      </Provider>,
+    );
+    expect(screen.getByTestId('search-form')).toMatchSnapshot();
+    expect(screen.getByTestId('search-input')).toHaveValue(inputValue);
   });
 });
