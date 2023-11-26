@@ -1,19 +1,41 @@
 import { ReactNode } from 'react';
-import { SetURLSearchParams } from 'react-router-dom';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
+
+export type apiResponse = {
+  data: {
+    animals: Character[];
+    page: {
+      firstPage: boolean;
+      lastPage: boolean;
+      numberOfElements: number;
+      pageNumber: number;
+      pageSize: number;
+      totalElements: number;
+      totalPages: number;
+    };
+    sort?: {
+      clauses: [];
+    };
+  };
+  error: FetchBaseQueryError | SerializedError;
+  loading: boolean;
+};
 
 export interface Character {
-  id: number;
   name: string;
   avian: boolean;
   canine: boolean;
   earthAnimal: boolean;
   earthInsect: boolean;
   feline: boolean;
+  uid: string;
 }
 
 export interface PaginationProps {
-  params: URLSearchParams;
-  setParams: SetURLSearchParams;
+  pageNumber: number;
+  totalPages: number;
+  paginationButtonsValue: number[];
 }
 
 export interface DetailsProps {
@@ -23,7 +45,6 @@ export interface DetailsProps {
 
 export interface SearchComponentProps {
   params: URLSearchParams;
-  setParams: SetURLSearchParams;
 }
 
 export interface SearchComponentState {
@@ -34,7 +55,6 @@ export interface SearchComponentState {
 
 export interface ResultListProps {
   params: URLSearchParams;
-  setParams: SetURLSearchParams;
   searchResults: readonly Character[];
 }
 
@@ -65,4 +85,11 @@ export interface MainContextProps {
 
 export interface MainProviderProps {
   children: ReactNode;
+}
+
+export interface URLProps {
+  page?: string;
+  limit?: string;
+  search?: string;
+  details?: string;
 }

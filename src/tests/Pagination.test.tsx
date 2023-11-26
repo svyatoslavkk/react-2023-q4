@@ -1,44 +1,65 @@
-import { describe, expect, it } from 'vitest';
+import React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from '../redux/store';
-import MainPage from '../components/MainPage';
-import {
-  createMemoryRouter,
-  RouterProvider,
-  createRoutesFromElements,
-  Route,
-} from 'react-router-dom';
+import { fireEvent, render, screen, cleanup } from '@testing-library/react';
+import mockRouter from 'next-router-mock';
+import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
+import Pagination from '../components/Pagination';
+
+vi.mock('next/router', () => vi.importActual('next-router-mock'));
 
 describe('Tests for the Pagination component', () => {
   it('The component updates URL query parameter when page changes', async () => {
-    const routes = createRoutesFromElements(
-      <Route
-        path="/"
-        element={
-          <Provider store={store}>
-            <MainPage />
-          </Provider>
-        }
-      ></Route>,
+    mockRouter.push('/');
+    render(
+      <Pagination
+        pageNumber={(Number(mockRouter.query.page) - 1) | 0}
+        totalPages={200}
+        paginationButtonsValue={[1, 2, 3]}
+      />,
+      {
+        wrapper: MemoryRouterProvider,
+      },
     );
-    const router = createMemoryRouter(routes);
-    render(<RouterProvider router={router} />);
-    expect(router.state.location.search).toBe('');
-    expect(await screen.findByTestId('pagination')).toBeInTheDocument();
+
+    expect(screen.getByTestId('pagination')).toBeInTheDocument();
     fireEvent.click(screen.getByText('3'));
-    expect(screen.getByTestId('pagination')).toMatchSnapshot();
-    expect(router.state.location.search).toBe('?page=3');
-    fireEvent.click(await screen.findByText('>'));
-    expect(router.state.location.search).toBe('?page=4');
-    fireEvent.click(await screen.findByText('...'));
-    expect(router.state.location.search).toBe('?page=7');
-    expect(await screen.findByTestId('pagination')).toBeInTheDocument();
-    expect(screen.getByTestId('page-1-button')).toHaveTextContent('5');
-    expect(screen.getByTestId('page-2-button')).toHaveTextContent('6');
-    expect(screen.getByTestId('page-3-button')).toHaveTextContent('7');
-    fireEvent.click(await screen.findByTestId('last-page-button'));
-    expect(router.state.location.search).toBe('?page=20');
+
+    expect(mockRouter.asPath).toBe('/?page=3');
+    cleanup();
+
+    render(
+      <Pagination
+        pageNumber={(Number(mockRouter.query.page) - 1) | 0}
+        totalPages={200}
+        paginationButtonsValue={[3, 4, 5]}
+      />,
+      {
+        wrapper: MemoryRouterProvider,
+      },
+    );
+
+    expect(await screen.findByTestId('page-1-button')).toBeInTheDocument();
+    fireEvent.click(await screen.findByText('Next'));
+    expect(mockRouter.asPath).toBe('/?page=4');
+
+    cleanup();
+
+    render(
+      <Pagination
+        pageNumber={(Number(mockRouter.query.page) - 1) | 0}
+        totalPages={200}
+        paginationButtonsValue={[3, 4, 5]}
+      />,
+      {
+        wrapper: MemoryRouterProvider,
+      },
+    );
+
+    expect(screen.getByTestId('page-1-button')).toHaveTextContent('8');
+    expect(screen.getByTestId('page-2-button')).toHaveTextContent('9');
+    expect(screen.getByTestId('page-3-button')).toHaveTextContent('10');
+    fireEvent.click(screen.getByTestId('last-page-button'));
+    expect(mockRouter.asPath).toBe('/?page=200');
   });
 });

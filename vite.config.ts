@@ -8,6 +8,10 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   test: {
+    coverage: {
+      provider: 'custom',
+      customProviderModule: 'my-custom-coverage-provider',
+    },
     globals: true,
     environment: 'jsdom',
     css: true,

@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Tests for the 404 Page component > 404 page is displayed when navigating to an invalid route. 1`] = `
+<body>
+  <div>
+    <div
+      class="error-boundary-block"
+    >
+      <h2
+        class="error-boundary-title"
+      >
+        Something went wrong
+      </h2>
+      <a
+        href="/"
+      >
+        Reload
+      </a>
+    </div>
+  </div>
+</body>
+`;
