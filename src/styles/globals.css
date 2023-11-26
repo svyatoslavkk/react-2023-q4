@@ -1,10 +1,10 @@
-@import url(./styles/spinner.css);
-@import url(./styles/search.css);
-@import url(./styles/input.css);
-@import url(./styles/resultList.css);
-@import url(./styles/errorBoundary.css);
-@import url(./styles/pagination.css);
-@import url(./styles/details.css);
+@import url(./spinner.css);
+@import url(./search.css);
+@import url(./input.css);
+@import url(./resultList.css);
+@import url(./errorBoundary.css);
+@import url(./pagination.css);
+@import url(./details.css);
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -110,4 +110,3 @@ button:focus-visible {
   z-index: 101;
   display: none;
 } */
-

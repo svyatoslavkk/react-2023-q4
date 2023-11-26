@@ -1,27 +1,13 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { setDetailsName } from '../redux/reducers/detailsSlice';
-import { useDispatch } from 'react-redux';
-import { Character } from '../interfaces/interfaces';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { updateQueryParams } from '../functions/updateQueryParams';
-import { ResultListProps } from '../interfaces/interfaces';
+import { Character } from '../interfaces/interfaces';
 
-function ResultList(props: ResultListProps) {
+function ResultList(props: Record<'searchResults', readonly Character[]>) {
   const imgUrl =
-    'https://live.staticflickr.com/65535/50235943523_f408808516_z.jpg';
-
-  const { params, setParams, searchResults } = props;
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleItemClick = (characterName: string) => {
-    setParams(updateQueryParams(params, 'details', characterName));
-    dispatch(setDetailsName(characterName));
-  };
-
-  useEffect(() => {
-    navigate('?' + props.params, { replace: true });
-  }, [navigate, props.params]);
+    'https://mir-s3-cdn-cf.behance.net/project_modules/1400/010cc167400543.5b38baa438d6f.png';
+  const { searchResults } = props;
+  const router = useRouter();
 
   return (
     <>
@@ -32,12 +18,23 @@ function ResultList(props: ResultListProps) {
               <li
                 className="result-list-item"
                 key={character.id}
-                onClick={() => handleItemClick(character.name)}
+                onClick={() => {
+                  router.push(
+                    '?' +
+                      updateQueryParams(
+                        router.query,
+                        'details',
+                        character.name,
+                      ),
+                  );
+                }}
               >
-                <img
+                <Image
                   className="result-list-item-image"
                   src={imgUrl}
                   alt="Character Image"
+                  width={50}
+                  height={50}
                 />
                 <div className="result-list-item-text-content">
                   <h3 className="result-list-item-name">{character.name}</h3>

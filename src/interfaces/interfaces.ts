@@ -1,5 +1,26 @@
 import { ReactNode } from 'react';
-import { SetURLSearchParams } from 'react-router-dom';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
+
+export type apiResponse = {
+  data: {
+    animals: Character[];
+    page: {
+      firstPage: boolean;
+      lastPage: boolean;
+      numberOfElements: number;
+      pageNumber: number;
+      pageSize: number;
+      totalElements: number;
+      totalPages: number;
+    };
+    sort?: {
+      clauses: [];
+    };
+  };
+  error: FetchBaseQueryError | SerializedError;
+  loading: boolean;
+};
 
 export interface Character {
   id: number;
@@ -12,8 +33,9 @@ export interface Character {
 }
 
 export interface PaginationProps {
-  params: URLSearchParams;
-  setParams: SetURLSearchParams;
+  pageNumber: number;
+  totalPages: number;
+  paginationButtonsValue: number[];
 }
 
 export interface DetailsProps {
@@ -23,7 +45,6 @@ export interface DetailsProps {
 
 export interface SearchComponentProps {
   params: URLSearchParams;
-  setParams: SetURLSearchParams;
 }
 
 export interface SearchComponentState {
@@ -34,7 +55,6 @@ export interface SearchComponentState {
 
 export interface ResultListProps {
   params: URLSearchParams;
-  setParams: SetURLSearchParams;
   searchResults: readonly Character[];
 }
 

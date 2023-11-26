@@ -1,37 +1,12 @@
 import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { setSearchValue } from '../redux/reducers/searchSlice';
-import {
-  setPageNumber,
-  setPaginationButtonsValue,
-} from '../redux/reducers/paginationSlice';
+import { useRouter } from 'next/router';
 import { updateQueryParams } from '../functions/updateQueryParams';
-import { SearchComponentProps } from '../interfaces/interfaces';
 
-function Search(props: SearchComponentProps) {
-  const searchValue = useSelector(
-    (state: RootState) => state.search.searchValue,
-  );
-  const pageNumber = useSelector(
-    (state: RootState) => state.pagination.pageNumber,
-  );
-  const dispatch = useDispatch();
+function Search(props: Record<'searchValue', string>) {
+  const { searchValue } = props;
   const inputCurrentValue = useRef(searchValue);
 
-  const { params, setParams } = props;
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    inputCurrentValue.current = e.target.value;
-  };
-
-  const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dispatch(setSearchValue(inputCurrentValue.current));
-    dispatch(setPaginationButtonsValue([1, 2, 3]));
-    setParams(updateQueryParams(params, 'search', ''));
-    if (pageNumber) dispatch(setPageNumber(0));
-  };
+  const router = useRouter();
 
   return (
     <div className="search-component">
@@ -40,10 +15,28 @@ function Search(props: SearchComponentProps) {
           type="text"
           className="form-field"
           placeholder="Enter character name"
-          onChange={handleInputChange}
+          onChange={(e) => {
+            e.target.value = e.target.value;
+            inputCurrentValue.current = e.target.value;
+          }}
         />
         <div className="button-container">
-          <button className="search-button" onClick={handleSearchClick}>
+          <button
+            className="search-button"
+            onClick={(e) => {
+              e.preventDefault();
+              localStorage.setItem('search', inputCurrentValue.current);
+              if (searchValue !== inputCurrentValue.current)
+                router.push(
+                  '?' +
+                    updateQueryParams(
+                      router.query,
+                      'search',
+                      inputCurrentValue.current,
+                    ),
+                );
+            }}
+          >
             Search
           </button>
         </div>

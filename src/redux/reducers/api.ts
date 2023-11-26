@@ -1,5 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
+import { apiResponse } from '../../interfaces/interfaces';
+
+type Params = {
+  pageNumber: number;
+  pageSize: number;
+  searchValue?: string;
+};
 
 export const cardsApi = createApi({
   reducerPath: 'cardsApi',
@@ -12,9 +19,9 @@ export const cardsApi = createApi({
     }
   },
   endpoints: (build) => ({
-    searchByValue: build.mutation({
+    searchByValue: build.mutation<apiResponse, Params>({
       query: (params) => ({
-        url: `?pageNumber=${params.pageNumber}`,
+        url: `?pageNumber=${params.pageNumber}&pageSize=${params.pageSize}`,
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `${encodeURIComponent('name')}=${encodeURIComponent(
