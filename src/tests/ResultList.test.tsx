@@ -1,60 +1,25 @@
+import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { createCardsListResponseMock } from './mocks/_mocks';
 import ResultList from '../components/ResultList';
 
-function createCardsListResponseMock(
-  arrLength: number,
-  limit: number,
-  details: boolean,
-) {
-  return new Array(arrLength)
-    .fill(undefined)
-    .map((_, ind) => {
-      return {
-        id: ind,
-        name: details ? 'details' : `testCard-${ind}`,
-        avian: true,
-        canine: false,
-        earthAnimal: false,
-        earthInsect: false,
-        feline: false,
-      };
-    })
-    .slice(0, limit);
-}
-
-vi.mock('react-redux');
+vi.mock('next/router', () => vi.importActual('next-router-mock'));
 
 describe('Tests for the Card List component', () => {
-  it('Component renders the specified number of cards - 10', async () => {
-    const searchResults = render(
-      <MemoryRouter>
-        <ResultList
-          params={new URLSearchParams('')}
-          setParams={vi.fn()}
-          searchResults={createCardsListResponseMock(7, 10, false)}
-        />
-      </MemoryRouter>,
+  it('Component renders the specified number of cards - 7', async () => {
+    render(
+      <ResultList searchResults={createCardsListResponseMock(7, 10, false)} />,
     );
-    expect(searchResults.baseElement).toMatchSnapshot();
+
     expect(await screen.findAllByText(/testCard/)).toHaveLength(7);
   });
 
   it('An appropriate message is displayed if no cards are present', async () => {
-    const searchResults = render(
-      <MemoryRouter>
-        <ResultList
-          params={new URLSearchParams('')}
-          setParams={vi.fn()}
-          searchResults={[]}
-        />
-      </MemoryRouter>,
-    );
+    render(<ResultList searchResults={[]} />);
 
-    expect(searchResults.baseElement).toMatchSnapshot();
-    expect(screen.queryByText('Nothing foundddddddddddd:(')).toBeFalsy();
-    expect(screen.getByText('Nothing found:(')).toBeTruthy();
+    expect(screen.getByText('No results found.')).toBeTruthy();
+
     expect(screen.queryByText(/testCard/)).toBeFalsy();
   });
 });

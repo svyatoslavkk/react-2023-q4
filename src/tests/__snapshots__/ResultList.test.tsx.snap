@@ -1,0 +1,205 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Tests for the Card List component > An appropriate message is displayed if no cards are present 1`] = `
+<body>
+  <div>
+    <div
+      class="result-list"
+    >
+      <p>
+        No results found.
+      </p>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Tests for the Card List component > Component renders the specified number of cards - 7 1`] = `
+<body>
+  <div>
+    <div
+      class="result-list"
+    >
+      <ul
+        class="fetching-results"
+      >
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-0
+            </h3>
+          </div>
+        </li>
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-1
+            </h3>
+          </div>
+        </li>
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-2
+            </h3>
+          </div>
+        </li>
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-3
+            </h3>
+          </div>
+        </li>
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-4
+            </h3>
+          </div>
+        </li>
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-5
+            </h3>
+          </div>
+        </li>
+        <li
+          class="result-list-item"
+        >
+          <img
+            alt="Character Image"
+            class="result-list-item-image"
+            data-nimg="1"
+            decoding="async"
+            height="50"
+            loading="lazy"
+            src="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75"
+            srcset="/_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=64&q=75 1x, /_next/image?url=https%3A%2F%2Fmir-s3-cdn-cf.behance.net%2Fproject_modules%2F1400%2F010cc167400543.5b38baa438d6f.png&w=128&q=75 2x"
+            style="color: transparent;"
+            width="50"
+          />
+          <div
+            class="result-list-item-text-content"
+          >
+            <h3
+              class="result-list-item-name"
+            >
+              testCard-6
+            </h3>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+`;

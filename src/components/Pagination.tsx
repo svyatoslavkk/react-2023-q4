@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRouter } from 'next/router';
 import { updateQueryParams } from '../functions/updateQueryParams';
 import { PaginationProps } from '../interfaces/interfaces';
@@ -8,7 +9,7 @@ function Pagination(props: PaginationProps) {
   const router = useRouter();
 
   return (
-    <ul className="pagination">
+    <ul className="pagination" data-testid="pagination">
       <li className="prev">
         <button
           onClick={() => {

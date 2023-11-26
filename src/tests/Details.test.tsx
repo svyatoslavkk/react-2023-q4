@@ -1,81 +1,60 @@
-import { describe, expect, it } from 'vitest';
+import React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import {
-  createMemoryRouter,
-  RouterProvider,
-  MemoryRouter,
-  createRoutesFromElements,
-  Route,
-} from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from '../redux/store';
-import MainPage from '../components/MainPage';
+  createCardsListResponseMock,
+  createCardsResponseMock,
+} from './mocks/_mocks';
+import mockRouter from 'next-router-mock';
+import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 import Details from '../components/Details';
 
+vi.mock('next/router', () => vi.importActual('next-router-mock'));
+
+vi.stubGlobal('getServerSideProps', {
+  searchValue: '',
+  response: createCardsResponseMock(10, 10, false),
+  detailsResponse: createCardsResponseMock(1, 1, true),
+  paginationButtonsValue: [1, 2, 3],
+});
+
 describe('Tests for the Detailed Card component', () => {
-  const routes = createRoutesFromElements(
-    <Route
-      path="/"
-      element={
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      }
-    >
-      <Route
-        index
-        element={
-          <Provider store={store}>
-            <Details />
-          </Provider>
-        }
-      />
-    </Route>,
-  );
-
-  it('Loading indicator is displayed while fetching data', async () => {
-    const router = createMemoryRouter(routes);
-    render(<RouterProvider router={router} />);
-    const card = (await screen.findAllByTestId('card'))[0];
-    expect(screen.queryByTestId('details')).not.toBeInTheDocument();
-    fireEvent.click(card);
-    const details = screen.getByTestId('details');
-    expect(details).toMatchSnapshot();
-    expect(details).toContainHTML(
-      '<span class="loader" data-testid="loader" />',
-    );
-  });
-
   it('Detailed card component correctly displays the detailed card data;', async () => {
-    const router = createMemoryRouter(routes);
-    render(<RouterProvider router={router} />);
-    const card = (await screen.findAllByTestId('card'))[0];
-    expect(screen.queryByTestId('details')).not.toBeInTheDocument();
-    fireEvent.click(card);
-    expect(screen.getByTestId('details')).toMatchSnapshot();
+    const data = createCardsListResponseMock(1, 1, true)[0];
+    const reverseData = {
+      avian: false,
+      canine: true,
+      earthAnimal: true,
+      earthInsect: true,
+      feline: true,
+      name: '',
+      uid: '',
+    };
+
+    render(<Details detailsData={data} />);
+    expect(screen.getByTestId('details')).toBeInTheDocument();
     expect(await screen.findByTestId('details-h1')).toHaveTextContent(
-      'details',
+      data.name,
     );
-    expect(screen.getByText('EarthAnimal: No')).toBeInTheDocument();
+    expect(screen.getByText('Earth Animal: No')).toBeInTheDocument();
     expect(screen.getByText('Avian: Yes')).toBeInTheDocument();
+    cleanup();
+    render(<Details detailsData={reverseData} />);
+    expect(screen.getByTestId('details')).toBeInTheDocument();
+    expect(await screen.findByTestId('details-h1')).toHaveTextContent('');
+    expect(screen.getByText('Earth Animal: Yes')).toBeInTheDocument();
+    expect(screen.getByText('Avian: No')).toBeInTheDocument();
   });
 
   it('Clicking the close button hides the component.', async () => {
+    mockRouter.push('/?details=details');
     render(
-      <MemoryRouter initialEntries={['/?details=Cat']}>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>,
+      <Details detailsData={createCardsListResponseMock(1, 1, true)[0]} />,
+      { wrapper: MemoryRouterProvider },
     );
     expect(await screen.findByTestId('details')).toBeInTheDocument();
-    expect(screen.getByTestId('details')).toMatchSnapshot();
     fireEvent.click(screen.getByTestId('cross'));
-    expect(screen.queryByTestId('details')).toMatchSnapshot();
-    expect(screen.queryByTestId('details')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('details-h1')).not.toBeInTheDocument();
-    expect(screen.queryByText('EarthAnimal: No')).not.toBeInTheDocument();
-    expect(screen.queryByText('Avian: Yes')).not.toBeInTheDocument();
+    expect(mockRouter.asPath).toEqual('/');
   });
 });

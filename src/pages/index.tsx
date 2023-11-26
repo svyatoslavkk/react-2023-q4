@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRouter } from 'next/router';
 import { wrapper } from '../redux/store';
 import { getRunningQueriesThunk, searchByValue } from '../redux/reducers/api';

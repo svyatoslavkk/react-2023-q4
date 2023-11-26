@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Tests for the Select component > Value changes correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="items-per-page"
+    >
+      <select
+        data-testid="select"
+        id="itemsPerPage"
+        name="itemsPerPage"
+      >
+        <option
+          data-testid="select-option"
+          value="10"
+        >
+          10
+        </option>
+        <option
+          data-testid="select-option"
+          value="20"
+        >
+          20
+        </option>
+        <option
+          data-testid="select-option"
+          value="30"
+        >
+          30
+        </option>
+      </select>
+    </div>
+  </div>
+</body>
+`;

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRouter } from 'next/router';
 import { updateQueryParams } from '../functions/updateQueryParams';
 import { Character } from '../interfaces/interfaces';
@@ -7,8 +8,9 @@ function Details(props: Record<'detailsData', Character>) {
   const router = useRouter();
 
   return (
-    <div className="details">
+    <div className="details" data-testid="details">
       <button
+        data-testid="cross"
         onClick={() => {
           const newParams = updateQueryParams(router.query, 'details', '');
           router.push(newParams.toString() ? '?' + newParams : '');
@@ -17,7 +19,9 @@ function Details(props: Record<'detailsData', Character>) {
         Close Details
       </button>
       <div>
-        <h2 className="details-name">{detailsData.name}</h2>
+        <h1 className="details-name" data-testid="details-h1">
+          {detailsData.name}
+        </h1>
         <div className="rest-data">
           <p>
             Avian:{' '}

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import { updateQueryParams } from '../functions/updateQueryParams';
@@ -9,11 +10,12 @@ function Search(props: Record<'searchValue', string>) {
   const router = useRouter();
 
   return (
-    <div className="search-component">
+    <div className="search-component" data-testid="search-form">
       <div className="input-content">
         <input
           type="text"
           className="form-field"
+          data-testid="search-input"
           placeholder="Enter character name"
           onChange={(e) => {
             e.target.value = e.target.value;

@@ -23,13 +23,13 @@ export type apiResponse = {
 };
 
 export interface Character {
-  id: number;
   name: string;
   avian: boolean;
   canine: boolean;
   earthAnimal: boolean;
   earthInsect: boolean;
   feline: boolean;
+  uid: string;
 }
 
 export interface PaginationProps {

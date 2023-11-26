@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { updateQueryParams } from '../functions/updateQueryParams';
@@ -11,13 +12,14 @@ function ResultList(props: Record<'searchResults', readonly Character[]>) {
 
   return (
     <>
-      <div className="result-list">
+      <div className="result-list" data-testid="search-results">
         {searchResults.length ? (
-          <ul className="fetching-results">
+          <div className="fetching-results">
             {searchResults.map((character: Character) => (
-              <li
+              <div
+                key={character.uid}
                 className="result-list-item"
-                key={character.id}
+                data-testid="card"
                 onClick={() => {
                   router.push(
                     '?' +
@@ -39,11 +41,11 @@ function ResultList(props: Record<'searchResults', readonly Character[]>) {
                 <div className="result-list-item-text-content">
                   <h3 className="result-list-item-name">{character.name}</h3>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
-          <p>No results found.</p>
+          <p data-testid="no-found">No results found.</p>
         )}
       </div>
     </>

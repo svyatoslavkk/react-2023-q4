@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRouter } from 'next/router';
 import { updateQueryParams } from '../functions/updateQueryParams';
 
@@ -12,6 +13,7 @@ function ItemsPerPage(props: Record<'pageSize', number>) {
       <select
         name="itemsPerPage"
         id="itemsPerPage"
+        data-testid="select"
         value={pageSize.toString()}
         onChange={(e) => {
           router.push(
@@ -20,7 +22,7 @@ function ItemsPerPage(props: Record<'pageSize', number>) {
         }}
       >
         {optionValues.map((el) => (
-          <option value={el} key={el}>
+          <option key={el} value={el} data-testid="select-option">
             {el}
           </option>
         ))}
