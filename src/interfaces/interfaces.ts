@@ -66,3 +66,10 @@ export interface MainContextProps {
 export interface MainProviderProps {
   children: ReactNode;
 }
+
+export interface URLProps {
+  page?: string;
+  limit?: string;
+  search?: string;
+  details?: string;
+}
