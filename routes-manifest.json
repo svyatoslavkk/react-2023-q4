@@ -1,0 +1,30 @@
+{
+  "version": 3,
+  "basePath": "",
+  "isCatchAllRoute": false,
+  "dynamicRoutes": [
+    {
+      "page": "/[slug]",
+      "regex": "^\\/(.+?)(?:\\/)?$",
+      "routeKeys": ["slug"]
+    }
+  ],
+  "locales": [],
+  "pages": {
+    "/404": {
+      "file": "not-found",
+      "isStatic": true,
+      "isSSG": false,
+      "isFallback": false,
+      "dataRoute": "/_next/data/12345/404.json"
+    },
+    "/": {
+      "file": "index",
+      "isStatic": true,
+      "isSSG": false,
+      "isFallback": false,
+      "dataRoute": "/_next/data/12345/index.json"
+    }
+  },
+  "buildId": "12345"
+}
