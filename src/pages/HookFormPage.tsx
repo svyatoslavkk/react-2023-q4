@@ -58,7 +58,7 @@ export default function HookFormPage() {
 
   return (
     <div className="container">
-      <h1>Hook Form Page</h1>
+      <h1 className="main-header">Hook Form Page</h1>
       <Link to="/" style={{textDecoration: 'none'}}>
         <button className="classic-button">
             Main page
