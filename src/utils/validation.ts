@@ -1,5 +1,5 @@
 import { object, string, number, boolean, ref, mixed } from 'yup';
-import store from '../redux/store';
+import { store } from '../redux/store';
 
 const countriesList = store.getState().countries.countries;
 
@@ -51,5 +51,17 @@ export const validationSchema = object({
     .required(requiredField)
     .test('includes in list', "Country doesn't exist", (value) =>
       countriesList.map((el) => el.toLowerCase()).includes(value.toLowerCase()),
+    ),
+});
+
+export const passwordSchema = object({
+  password: string()
+    .required('This is a required field')
+    .matches(/^(?=.*[a-zа-я])/, 'Must contain at least one lowercase character')
+    .matches(/^(?=.*[A-ZА-Я])/, 'Must contain at least one uppercase character')
+    .matches(/^(?=.*[0-9])/, 'Must contain at least one number')
+    .matches(
+      /^(?=.*[!@#%&$^*()?><|+=])/,
+      'Must contain at least one special character'
     ),
 });

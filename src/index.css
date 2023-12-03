@@ -1,0 +1,144 @@
+@import url(./styles/input.css);
+@import url(./styles/tile.css);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: #171717;
+  color: #fff;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.classic-button {
+  border: none;
+  outline: none;
+  padding: 0.75rem 1rem;
+  border-radius: 1.5rem;
+  font-size: 18px;
+  background-color: brown;
+  color: #eee;
+  transition: 0.2s ease;
+}
+
+.classic-button:hover,
+.classic-button:active,
+.classic-button:focus {
+  background-color: rgb(231, 60, 60);
+}
+
+.classic-input {
+  border: none;
+  outline: none;
+  background-color: #aaa;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+}
+
+.input-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-block-secondary {
+  display: flex;
+  gap: 1rem;
+}
+
+.radio-block {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.input-container {
+  position: relative;
+  padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+  background-color: #262626;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.error-message {
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  color: #ff7676;
+  bottom: 4px;
+}
+
+.type-password-error-message {
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  color: #ff7676;
+  top: 142px;
+}
+
+.repeat-password-error-message {
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  color: #ff7676;
+  top: 64px;
+}
+
+.tc-input-block {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 0.5rem;
+}
+
+.input-list {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 12px;
+}
+
+.eye-button {
+  margin-left: 0.5rem;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+}
+
+.type-password-section {
+  margin-bottom: 1.5rem;
+}
+
+.repeat-password-section {
+  margin-bottom: 1.5rem;
+}
+
+.input-container.password {
+  padding-bottom: 3rem;
+}
+
+.strength-indicator {
+  display: flex;
+  position: absolute;
+  bottom: 8px;
+}

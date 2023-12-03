@@ -1,11 +1,19 @@
-export default function TCInput() {
+import { FormProps } from "../../interfaces/interfaces";
+
+export default function TCInput(props: FormProps) {
+  const { register, error } = props;
+
   return (
-    <>
-      <label htmlFor="accept">Accept Term and Conditions</label>
-      <div>
-        <input className="tc-input" type="checkbox" />
-        <span className="error-message"></span>
+    <div className="input-container">
+      <div className="tc-input-block">
+        <input
+          className="tc-input"
+          type="checkbox"
+          {...register('accept')}
+        />
+        <label htmlFor="accept">Accept Term and Conditions</label>
       </div>
-    </>
+      <span className="error-message">{error ? error : ''}</span>
+    </div>
   );
 }

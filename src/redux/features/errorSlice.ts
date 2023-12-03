@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ValidationError } from 'yup';
-import { ErrorState } from '../../interfaces/interfaces';
+import { AllFields } from '../../interfaces/interfaces';
 
-const initialState: ErrorState = {
+const initialState: AllFields = {
   name: '',
   age: '',
   email: '',
@@ -14,9 +14,9 @@ const initialState: ErrorState = {
   country: '',
 };
 
-const resetErrors = (state: ErrorState) => {
+const resetErrors = (state: AllFields) => {
   for (const key in state) {
-    state[key as keyof ErrorState] = '';
+    state[key as keyof AllFields] = '';
   }
 };
 
@@ -29,8 +29,8 @@ export const errorSlice = createSlice({
       const errors: ValidationError[] = action.payload;
       errors.forEach((el) => {
         const path = el.path?.split('.')[0];
-        if (!state[path as keyof ErrorState]) {
-          state[path as keyof ErrorState] = el.message;
+        if (!state[path as keyof AllFields]) {
+          state[path as keyof AllFields] = el.message;
         }
       });
     },
